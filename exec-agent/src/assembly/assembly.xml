@@ -29,9 +29,20 @@
             <fileMode>0755</fileMode>
             <outputDirectory></outputDirectory>
         </fileSet>
-        <fileSet>
-            <directory>${project.build.directory}/${go.workspace.name}/src/github.com/eclipse/che/exec-agent/static</directory>
-            <outputDirectory></outputDirectory>
-        </fileSet>
     </fileSets>
+    <dependencySets>
+        <dependencySet>
+            <outputDirectory>/static</outputDirectory>
+            <fileMode>0755</fileMode>
+            <includes>
+                <include>org.eclipse.che.plugin:plugin-terminal-ui:jar</include>
+            </includes>
+            <unpack>true</unpack>
+            <unpackOptions>
+                <excludes>
+                    <exclude>**/META-INF/**</exclude>
+                </excludes>
+            </unpackOptions>
+        </dependencySet>
+    </dependencySets>
 </assembly>

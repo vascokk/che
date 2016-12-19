@@ -24,78 +24,90 @@
     <packaging>jar</packaging>
     <name>Terminal UI</name>
     <build>
-        <resources>
-            <resource>
-                <directory>./build</directory>
-            </resource>
-        </resources>
         <plugins>
-            <plugin>
-                <groupId>com.mycila</groupId>
-                <artifactId>license-maven-plugin</artifactId>
-                <configuration>
-                    <useDefaultExcludes>false</useDefaultExcludes>
-                    <excludes>
-                        <exclude>**</exclude>
-                        <!--it' temporary solution-->
-                    </excludes>
-                </configuration>
-            </plugin>
           <plugin>
-            <artifactId>maven-clean-plugin</artifactId>
-            <configuration>
-              <filesets>
-                <fileset>
-                  <directory>${basedir}/node_modules</directory>
-                  <followSymlinks>false</followSymlinks>
-                </fileset>
-                <fileset>
-                  <directory>${basedir}/typings</directory>
-                  <followSymlinks>false</followSymlinks>
-                </fileset>
-                <fileset>
-                  <directory>${basedir}/build</directory>
-                  <followSymlinks>false</followSymlinks>
-                </fileset>
-              </filesets>
-            </configuration>
+              <groupId>com.mycila</groupId>
+              <artifactId>license-maven-plugin</artifactId>
+              <configuration>
+                  <useDefaultExcludes>false</useDefaultExcludes>
+                  <excludes>
+                      <exclude>**</exclude>
+                      <!--it' temporary solution-->
+                  </excludes>
+              </configuration>
           </plugin>
           <plugin>
-            <artifactId>maven-antrun-plugin</artifactId>
+              <artifactId>maven-antrun-plugin</artifactId>
+              <executions>
+                <execution>
+                  <id>clean-up</id>
+                  <phase>clean</phase>
+                  <goals>
+                    <goal>run</goal>
+                  </goals>
+                  <configuration>
+                    <tasks>
+                      <delete dir="${basedir}/node_modules"/>
+                      <delete dir="${basedir}/typings"/>
+                      <delete dir="${basedir}/build"/>
+                      <delete dir="${basedir}/lib"/>
+                    </tasks>
+                  </configuration>
+                  </execution>
+                  <execution>
+                      <id>compile</id>
+                      <phase>process-resources</phase>
+                      <goals>
+                          <goal>run</goal>
+                      </goals>
+                      <configuration>
+                          <target>
+                              Download NPM dependencies
+                              <exec dir="${basedir}" executable="npm" failonerror="true">
+                                  <arg value="install" />
+                              </exec>
+                              <exec dir="${basedir}" executable="npm" failonerror="true">
+                                  <arg value="run-script" />
+                                  <arg value="build" />
+                              </exec>
+                              <!--todo it would be nice using gulp like in the CHE dashboard-->
+                          </target>
+                      </configuration>
+                  </execution>
+                  <execution>
+                      <id>compilation</id>
+                      <phase>test</phase>
+                      <goals>
+                          <goal>run</goal>
+                      </goals>
+                      <configuration>
+                          <target unless="skipTests">
+                              <!-- Run unit tests -->
+                              <exec dir="${basedir}" executable="npm" failonerror="true">
+                                  <arg value="test" />
+                              </exec>
+                          </target>
+                      </configuration>
+                  </execution>
+              </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-resources-plugin</artifactId>
             <executions>
               <execution>
-                <id>compile</id>
-                <phase>compile</phase>
+                <id>copy-resources</id>
+                <phase>process-classes</phase>
                 <goals>
-                  <goal>run</goal>
+                  <goal>copy-resources</goal>
                 </goals>
                 <configuration>
-                  <target>
-                    Download NPM dependencies
-                    <exec dir="${basedir}" executable="npm" failonerror="true">
-                      <arg value="install"/>
-                    </exec>
-                    <exec dir="${basedir}" executable="npm" failonerror="true">
-                      <arg value="run-script"/>
-                      <arg value="build"/>
-                    </exec>
-                    <!--todo it would be nice using gulp like in the CHE dashboard-->
-                  </target>
-                </configuration>
-              </execution>
-              <execution>
-                <id>compilation</id>
-                <phase>test</phase>
-                <goals>
-                  <goal>run</goal>
-                </goals>
-                <configuration>
-                  <target unless="skipTests">
-                    <!-- Run unit tests -->
-                    <exec dir="${basedir}" executable="npm" failonerror="true">
-                      <arg value="test"/>
-                    </exec>
-                  </target>
+                  <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+                  <resources>
+                    <resource>
+                      <directory>${basedir}/build</directory>
+                      <filtering>false</filtering>
+                    </resource>
+                  </resources>
                 </configuration>
               </execution>
             </executions>
