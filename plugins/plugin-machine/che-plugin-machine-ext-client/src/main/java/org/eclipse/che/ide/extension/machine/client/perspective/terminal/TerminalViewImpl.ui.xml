@@ -33,15 +33,15 @@
             overflow: hidden;
             background-color: outputBackgroundColor;
         }
-
+        /*Todo improve css*/
         .unavailable {
-            width: 100%;
-            height: 100%;
-            left: 0;
+            /*width: 100%;*/
+            /*height: 100%;*/
+            /*left: 0;*/
             cursor: default;
-            position: absolute;
-            text-align: center;
-            top: 50% !important;
+            /*position: absolute;*/
+            /*text-align: center;*/
+            /*top: 50% !important;*/
             text-shadow: 0 1px 0 rgba(0, 0, 0, 1);
         }
     </ui:style>

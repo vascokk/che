@@ -63,7 +63,6 @@ public class RequireJsLoader {
             @Override
             public void onError(final RequireError error) {
                 callback.onFailure(new JavaScriptException(error));
-
             }
         }, defaultConfig, requiredScripts, moduleKeys);
     }

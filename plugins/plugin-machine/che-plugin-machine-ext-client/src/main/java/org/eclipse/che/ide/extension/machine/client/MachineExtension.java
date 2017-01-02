@@ -10,12 +10,17 @@
  *******************************************************************************/
 package org.eclipse.che.ide.extension.machine.client;
 
+import com.google.gwt.core.client.Callback;
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import com.google.web.bindery.event.shared.EventBus;
 
+import org.eclipse.che.api.promises.client.Promise;
+import org.eclipse.che.api.promises.client.callback.AsyncPromiseHelper;
 import org.eclipse.che.ide.actions.StopWorkspaceAction;
 import org.eclipse.che.ide.api.action.ActionManager;
 import org.eclipse.che.ide.api.action.DefaultActionGroup;
@@ -43,11 +48,13 @@ import org.eclipse.che.ide.extension.machine.client.actions.SelectCommandComboBo
 import org.eclipse.che.ide.extension.machine.client.actions.SwitchPerspectiveAction;
 import org.eclipse.che.ide.extension.machine.client.command.macros.ServerPortProvider;
 import org.eclipse.che.ide.extension.machine.client.machine.MachineStatusHandler;
+import org.eclipse.che.ide.extension.machine.client.perspective.terminal.TerminalInitializePromiseHolder;
 import org.eclipse.che.ide.extension.machine.client.processes.NewTerminalAction;
 import org.eclipse.che.ide.extension.machine.client.processes.actions.CloseConsoleAction;
 import org.eclipse.che.ide.extension.machine.client.processes.actions.ReRunProcessAction;
 import org.eclipse.che.ide.extension.machine.client.processes.actions.StopProcessAction;
 import org.eclipse.che.ide.extension.machine.client.targets.EditTargetsAction;
+import org.eclipse.che.ide.requirejs.RequireJsLoader;
 import org.eclipse.che.ide.util.input.KeyCodeMap;
 
 import javax.inject.Named;
@@ -77,7 +84,7 @@ public class MachineExtension {
     public static final String GROUP_MACHINES_DROPDOWN = "MachinesSelector";
     public static final String GROUP_MACHINES_LIST     = "MachinesListGroup";
 
-    private final PerspectiveManager        perspectiveManager;
+    private final PerspectiveManager perspectiveManager;
 
     /**
      * Controls central toolbar action group visibility. Use for example next snippet:
@@ -87,14 +94,17 @@ public class MachineExtension {
      * to define a constant. If no constant defined than default value is used - <code>true</code>.
      */
     @Inject(optional = true)
-    @Named("central.toolbar.visibility") boolean centralToolbarVisible = true;
+    @Named("central.toolbar.visibility")
+    boolean centralToolbarVisible = true;
 
     @Inject
     public MachineExtension(final MachineResources machineResources,
                             final EventBus eventBus,
                             final Provider<ServerPortProvider> machinePortProvider,
                             final PerspectiveManager perspectiveManager,
-                            final Provider<MachineStatusHandler> machineStatusHandlerProvider) {
+                            final Provider<MachineStatusHandler> machineStatusHandlerProvider,
+                            final TerminalInitializePromiseHolder terminalModule,
+                            final RequireJsLoader requireJsLoader) {
         this.perspectiveManager = perspectiveManager;
 
         machineResources.getCss().ensureInjected();
@@ -131,6 +141,28 @@ public class MachineExtension {
                 });
             }
         });
+
+        Promise<Void> termInitPromise = AsyncPromiseHelper.createFromAsyncRequest(new AsyncPromiseHelper.RequestCall<Void>() {
+            @Override
+            public void makeCall(AsyncCallback<Void> callback) {
+                injectTerminal(requireJsLoader, callback);
+            }
+        });
+        terminalModule.setInitializerPromise(termInitPromise);
+    }
+
+    private void injectTerminal(RequireJsLoader rJsLoader, final AsyncCallback<Void> callback) {
+        rJsLoader.require(new Callback<JavaScriptObject[], Throwable>() {
+            @Override
+            public void onFailure(Throwable reason) {
+                callback.onFailure(reason);
+            }
+
+            @Override
+            public void onSuccess(JavaScriptObject[] result) {
+                callback.onSuccess(null);
+            }
+        }, new String[]{"term/xterm"}, new String[]{"Xterm"});
     }
 
     /**

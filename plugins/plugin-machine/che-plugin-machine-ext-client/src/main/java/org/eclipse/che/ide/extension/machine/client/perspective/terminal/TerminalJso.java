@@ -24,8 +24,8 @@ class TerminalJso extends JavaScriptObject {
     protected TerminalJso() {
     }
 
-    public static native TerminalJso create(TerminalOptionsJso options) /*-{
-        return new $wnd.Terminal(options);
+    public static native TerminalJso create(JavaScriptObject termJSO, TerminalOptionsJso options) /*-{
+        return new termJSO(options);
     }-*/;
 
     public final native void open(Element element) /*-{
