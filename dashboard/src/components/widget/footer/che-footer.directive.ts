@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2016 Codenvy, S.A.
+ * Copyright (c) 2015-2017 Codenvy, S.A.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -87,7 +87,7 @@ export class CheFooter {
     }
 
     // docs
-    template += '<a class=\"che-footer-button-blue che-footer-button\" href=\"/#/docs\">Docs<a/>';
+    template += '<a class=\"che-footer-button-blue che-footer-button\" href=\"/docs\" target=\"_blank\">Docs<a/>';
 
     // help
     if (supportHelpPath && supportHelpTitle) {
