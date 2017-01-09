@@ -99,6 +99,7 @@ public class MachineExtension {
 
     @Inject
     public MachineExtension(final MachineResources machineResources,
+                            final TerminalResources terminalResources,
                             final EventBus eventBus,
                             final Provider<ServerPortProvider> machinePortProvider,
                             final PerspectiveManager perspectiveManager,
@@ -108,6 +109,7 @@ public class MachineExtension {
         this.perspectiveManager = perspectiveManager;
 
         machineResources.getCss().ensureInjected();
+        terminalResources.getCss().ensureInjected();
         machineStatusHandlerProvider.get();
 
         eventBus.addHandler(WsAgentStateEvent.TYPE, new WsAgentStateHandler() {
@@ -162,7 +164,7 @@ public class MachineExtension {
             public void onSuccess(JavaScriptObject[] result) {
                 callback.onSuccess(null);
             }
-        }, new String[]{"term/xterm"}, new String[]{"Xterm"});
+        }, new String[]{"term/xterm", "term/addons/fit/fit"}, new String[]{"Xterm", "Fit"});
     }
 
     /**

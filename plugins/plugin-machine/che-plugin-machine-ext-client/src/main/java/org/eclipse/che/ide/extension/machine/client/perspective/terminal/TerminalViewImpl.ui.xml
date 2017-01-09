@@ -23,8 +23,7 @@
             position: relative;
         }
 
-        .terminalPanel {
-            position: absolute;
+        .termPanel {
             -moz-user-select: text;
             -webkit-user-select: auto;
             user-select: text;
@@ -32,22 +31,28 @@
             height: 100%;
             overflow: hidden;
             background-color: outputBackgroundColor;
+            padding-left: 3px;
+            padding-top: 3px;
+            /*add padding without changing div size*/
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
         }
-        /*Todo improve css*/
+
         .unavailable {
-            /*width: 100%;*/
-            /*height: 100%;*/
-            /*left: 0;*/
+            width: 100%;
+            height: 100%;
+            left: 0;
             cursor: default;
-            /*position: absolute;*/
-            /*text-align: center;*/
-            /*top: 50% !important;*/
+            position: absolute;
+            text-align: center;
+            top: 50% !important;
             text-shadow: 0 1px 0 rgba(0, 0, 0, 1);
         }
     </ui:style>
 
-    <g:FlowPanel width="100%" height="100%" styleName="{style.terminalView}">
+    <g:FlowPanel debugId="terminal-view" styleName="{style.terminalView}">
         <g:Label ui:field="unavailableLabel" visible="false" text="{locale.terminalTryRestarting}" addStyleNames="{style.unavailable}"/>
-        <g:FlowPanel ui:field="terminalPanel" styleName="{style.terminalPanel}"/>
+        <g:FlowPanel ui:field="terminalPanel" debugId="termPanel" styleName="{style.termPanel}"/>
     </g:FlowPanel>
 </ui:UiBinder>

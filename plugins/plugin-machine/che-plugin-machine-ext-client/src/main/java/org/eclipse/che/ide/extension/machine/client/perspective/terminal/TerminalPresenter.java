@@ -10,11 +10,8 @@
  *******************************************************************************/
 package org.eclipse.che.ide.extension.machine.client.perspective.terminal;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArrayInteger;
-import com.google.gwt.dom.client.Document;
-import com.google.gwt.dom.client.LinkElement;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -191,15 +188,6 @@ public class TerminalPresenter implements TabPresenter, TerminalView.ActionDeleg
                 }
             }
         });
-
-        injectCssLink(GWT.getModuleBaseForStaticFiles() + "term/xterm.css");
-    }
-
-    private static void injectCssLink(final String url) {
-        final LinkElement link = Document.get().createLinkElement();
-        link.setRel("stylesheet");
-        link.setHref(url);
-        Document.get().getHead().appendChild(link);
     }
 
     /**
@@ -234,10 +222,14 @@ public class TerminalPresenter implements TabPresenter, TerminalView.ActionDeleg
     }
 
     @Override
-    public void setTerminalSize(int x, int y) {
+    public void fitTerminalSize() {
         if (!connected) {
             return;
         }
+
+        TerminalGeometryJso terminalGeometry = terminal.proposeGeometry();
+        int x = terminalGeometry.getCols();
+        int y = terminalGeometry.getRows();
 
         if (width == x && height == y) {
             return;

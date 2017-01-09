@@ -10,26 +10,21 @@
  *******************************************************************************/
 package org.eclipse.che.ide.extension.machine.client.perspective.terminal;
 
-import com.google.inject.Singleton;
-
-import org.eclipse.che.api.promises.client.Promise;
+import com.google.gwt.core.client.JavaScriptObject;
 
 /**
  * @author Alexander Andrienko
  */
-@Singleton
-public class TerminalInitializePromiseHolder {
+public class TerminalGeometryJso extends JavaScriptObject {
 
-    private Promise<Void> initializerPromise;
-
-    public void setInitializerPromise(Promise<Void> initializerPromise) {
-        this.initializerPromise = initializerPromise;
+    protected TerminalGeometryJso() {
     }
 
-    public Promise<Void> getInitializerPromise() {
-        if (initializerPromise == null) {
-            throw new RuntimeException("Terminal initializer not set");
-        }
-        return initializerPromise;
-    }
+    public final native int getCols() /*-{
+        return this.cols;
+    }-*/;
+
+    public final native int getRows() /*-{
+        return this.rows;
+    }-*/;
 }

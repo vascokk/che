@@ -99,9 +99,7 @@ final class TerminalViewImpl extends Composite implements TerminalView, Focusabl
             return;
         }
 
-        int x = (int)(Math.floor(offsetWidth / 6.6221374));
-        int y = (int)Math.floor(offsetHeight / 13);
-        delegate.setTerminalSize(x, y);
+        delegate.fitTerminalSize();
     }
 
     @Override

@@ -26,5 +26,6 @@
     <inherits name="org.eclipse.che.ide.ui.CodenvyUI"/>
 
     <source path="client"/>
+    <source path="public"/>
     <source path=""/>
 </module>
