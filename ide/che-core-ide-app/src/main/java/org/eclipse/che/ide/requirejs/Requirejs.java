@@ -10,7 +10,7 @@
  *******************************************************************************/
 package org.eclipse.che.ide.requirejs;
 
-import org.eclipse.che.ide.requirejs.config.RequirejsConfig;
+import org.eclipse.che.ide.requirejs.conf.RequirejsConfig;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArrayString;
