@@ -38,7 +38,10 @@
     "glob": "^7.0.5",
     "gulp": "^3.9.1",
     "gulp-rimraf": "0.2.1",
-    "gulp-jshint": "2.0.4",
+    "gulp-typescript": "3.1.4",
+    "gulp-util": "3.0.8",
+    "gulp-sync-task": "1.0.3",
+    "gulp-browserify": "0.5.1",
     "jsdoc": "3.4.3",
     "mocha": "2.5.3",
     "nodemon": "1.10.2",
@@ -50,6 +53,6 @@
   },
   "scripts": {
     "test": "mocha --recursive ./lib",
-    "build": "./bin/build"
+    "build": "gulp build"
   }
 }

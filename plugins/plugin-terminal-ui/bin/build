@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-set -e
+set -x
 
 # $BUILD_DIR should default to "build"
 BUILD_DIR=${BUILD_DIR:=build}
@@ -17,9 +17,9 @@ tsc
 
 # Concat all xterm.js files into a single file and output as a UMD to $BUILD_DIR/xterm.js
 browserify ./lib/xterm.js --standalone Terminal --debug --outfile ./$BUILD_DIR/xterm.js
-cat ./$BUILD_DIR/xterm.js | exorcist ./$BUILD_DIR/xterm.js.map -b ./$BUILD_DIR > ./$BUILD_DIR/xterm.temp.js
-rm ./$BUILD_DIR/xterm.js
-mv ./$BUILD_DIR/xterm.temp.js ./$BUILD_DIR/xterm.js
+#cat ./$BUILD_DIR/xterm.js | exorcist ./$BUILD_DIR/xterm.js.map -b ./$BUILD_DIR > ./$BUILD_DIR/xterm.temp.js
+#rm ./$BUILD_DIR/xterm.js
+#mv ./$BUILD_DIR/xterm.temp.js ./$BUILD_DIR/xterm.js
 
 # Resolve the chain of sourcemaps so that ./$BUILD_DIR/xterm.js.map points at ./src
 sorcery -i $BUILD_DIR/xterm.js
