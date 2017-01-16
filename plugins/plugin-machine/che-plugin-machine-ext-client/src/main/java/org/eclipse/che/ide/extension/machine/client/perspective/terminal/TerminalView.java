@@ -25,7 +25,7 @@ import javax.validation.constraints.NotNull;
 interface TerminalView extends View<TerminalView.ActionDelegate> {
 
     interface ActionDelegate {
-        void fitTerminalSize();
+        void setTerminalSize(int cols, int rows);
 
         /**
          * Set focus on the terminal panel.

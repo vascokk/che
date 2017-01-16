@@ -87,7 +87,7 @@
 }
 
 .terminal:not(.focus) .terminal-cursor {
-    outline: 1px solid #fff;
+    outline: 1px solid blueIconColor;
     outline-offset: -1px;
     background-color: transparent;
 }
@@ -98,12 +98,12 @@
 
 @keyframes blink-cursor {
     0% {
-        background-color: #fff;
+        background-color: blueIconColor;
         color: outputBackgroundColor;
     }
     50% {
         background-color: transparent;
-        color: #FFF;
+        color: blueIconColor;
     }
 }
 

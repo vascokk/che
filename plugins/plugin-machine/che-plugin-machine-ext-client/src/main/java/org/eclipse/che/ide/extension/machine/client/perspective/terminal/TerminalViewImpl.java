@@ -11,6 +11,7 @@
 package org.eclipse.che.ide.extension.machine.client.perspective.terminal;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Timer;
@@ -43,6 +44,10 @@ final class TerminalViewImpl extends Composite implements TerminalView, Focusabl
 
     private ActionDelegate delegate;
 
+    private double charWidth;
+    private double charHeight;
+    private Element termElem;
+
     public TerminalViewImpl() {
         initWidget(UI_BINDER.createAndBindUi(this));
     }
@@ -61,10 +66,33 @@ final class TerminalViewImpl extends Composite implements TerminalView, Focusabl
         terminalPanel.getElement().getStyle().setProperty("opacity", "0");
 
         terminal.open(terminalPanel.getElement());
+        //terminal.fit();
+
+        TerminalGeometryJso termGeometry = terminal.proposeGeometry();
+
+        this.termElem  = terminal.getElement();
+        this.charWidth = getWidth()/termGeometry.getCols();
+        this.charHeight = getHeight()/termGeometry.getRows();
 
         terminalPanel.getElement().getFirstChildElement().getStyle().clearProperty("backgroundColor");
         terminalPanel.getElement().getFirstChildElement().getStyle().clearProperty("color");
         terminalPanel.getElement().getStyle().clearProperty("opacity");
+    }
+
+    private int getWidth() {
+        if (termElem != null) {
+            int scrollWidth = 17;
+            Element parent = termElem.getParentElement();
+            return Math.max(0, parent.getOffsetWidth() - scrollWidth);
+        }
+        return 0;
+    }
+
+    private int getHeight() {
+        if (termElem != null) {
+            return termElem.getParentElement().getOffsetHeight();
+        }
+        return 0;
     }
 
     /** {@inheritDoc} */
@@ -78,8 +106,10 @@ final class TerminalViewImpl extends Composite implements TerminalView, Focusabl
 
     @Override
     public void onResize() {
-        resizeTimer.cancel();
-        resizeTimer.schedule(200);
+        if (termElem != null) {
+            resizeTimer.cancel();
+            resizeTimer.schedule(200);
+        }
     }
 
     private Timer resizeTimer = new Timer() {
@@ -90,15 +120,17 @@ final class TerminalViewImpl extends Composite implements TerminalView, Focusabl
     };
 
     private void resizeTerminal() {
-        int offsetWidth = terminalPanel.getOffsetWidth();
-        int offsetHeight = terminalPanel.getOffsetHeight();
+        int offsetWidth = getWidth();
+        int offsetHeight = getHeight();
         if (offsetWidth <= 0 || offsetHeight <= 0) {
             resizeTimer.cancel();
             resizeTimer.schedule(500);
             return;
         }
 
-        delegate.fitTerminalSize();
+        int cols = (int)Math.floor(offsetWidth/charWidth);
+        int rows = (int)Math.floor(offsetHeight/charHeight);
+        delegate.setTerminalSize(cols, rows);
     }
 
     @Override

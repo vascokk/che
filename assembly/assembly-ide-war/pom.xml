@@ -299,6 +299,10 @@
             <artifactId>testng</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.eclipse.che.plugin</groupId>
+            <artifactId>plugin-terminal-ui</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <resources>

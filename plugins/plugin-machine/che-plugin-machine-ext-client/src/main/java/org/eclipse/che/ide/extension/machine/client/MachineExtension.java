@@ -52,14 +52,13 @@ import org.eclipse.che.ide.extension.machine.client.actions.SwitchPerspectiveAct
 import org.eclipse.che.ide.extension.machine.client.command.macros.ServerPortProvider;
 import org.eclipse.che.ide.extension.machine.client.machine.MachineStatusHandler;
 import org.eclipse.che.ide.extension.machine.client.perspective.terminal.TerminalInitializePromiseHolder;
-import org.eclipse.che.ide.extension.machine.client.perspective.terminal.TerminalInitializePromiseHolder;
 import org.eclipse.che.ide.extension.machine.client.processes.NewTerminalAction;
 import org.eclipse.che.ide.extension.machine.client.processes.actions.CloseConsoleAction;
 import org.eclipse.che.ide.extension.machine.client.processes.actions.ReRunProcessAction;
 import org.eclipse.che.ide.extension.machine.client.processes.actions.StopProcessAction;
 import org.eclipse.che.ide.extension.machine.client.targets.EditTargetsAction;
 import org.eclipse.che.ide.requirejs.RequireJsLoader;
-import org.eclipse.che.ide.requirejs.RequireJsLoader;
+import org.eclipse.che.ide.terminal.client.TerminalResources;
 import org.eclipse.che.ide.util.input.KeyCodeMap;
 
 import javax.inject.Named;
@@ -115,7 +114,7 @@ public class MachineExtension {
         this.perspectiveManager = perspectiveManager;
 
         machineResources.getCss().ensureInjected();
-        terminalResources.getCss().ensureInjected();
+        terminalResources.getTerminalStyle().ensureInjected();
         machineStatusHandlerProvider.get();
 
         eventBus.addHandler(WsAgentStateEvent.TYPE, new WsAgentStateHandler() {
@@ -169,7 +168,7 @@ public class MachineExtension {
             public void onSuccess(JavaScriptObject[] result) {
                 callback.onSuccess(null);
             }
-        }, new String[]{"term/xterm", "term/addons/fit/fit"}, new String[]{"Xterm", "Fit"});
+        }, new String[]{"term/xterm"}, new String[]{"Xterm"});
     }
 
     /**

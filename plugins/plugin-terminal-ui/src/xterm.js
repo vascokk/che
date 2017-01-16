@@ -10,10 +10,10 @@
  * @license MIT
  */
 
-import { CompositionHelper } from './CompositionHelper.js';
-import { EventEmitter } from './EventEmitter.js';
-import { Viewport } from './Viewport.js';
-import { rightClickHandler, pasteHandler, copyHandler } from './handlers/Clipboard.js';
+import { CompositionHelper } from './CompositionHelper';
+import { EventEmitter } from './EventEmitter';
+import { Viewport } from './Viewport';
+import { rightClickHandler, pasteHandler, copyHandler } from './handlers/Clipboard';
 import * as Browser from './utils/Browser';
 import * as Keyboard from './utils/Keyboard';
 

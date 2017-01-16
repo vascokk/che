@@ -23,95 +23,114 @@
     <version>5.1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Terminal UI</name>
+    <dependencies>
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-user</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-user</artifactId>
+        </dependency>
+    </dependencies>
     <build>
+        <sourceDirectory>src/main/java</sourceDirectory>
+        <outputDirectory>target/classes</outputDirectory>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
         <plugins>
-          <plugin>
-              <groupId>com.mycila</groupId>
-              <artifactId>license-maven-plugin</artifactId>
-              <configuration>
-                  <useDefaultExcludes>false</useDefaultExcludes>
-                  <excludes>
-                      <exclude>**</exclude>
-                      <!--it' temporary solution-->
-                  </excludes>
-              </configuration>
-          </plugin>
-          <plugin>
-              <artifactId>maven-antrun-plugin</artifactId>
-              <executions>
-                <execution>
-                  <id>clean-up</id>
-                  <phase>clean</phase>
-                  <goals>
-                    <goal>run</goal>
-                  </goals>
-                  <configuration>
-                    <tasks>
-                      <delete dir="${basedir}/node_modules"/>
-                      <delete dir="${basedir}/typings"/>
-                      <delete dir="${basedir}/build"/>
-                      <delete dir="${basedir}/lib"/>
-                    </tasks>
-                  </configuration>
-                  </execution>
-                  <execution>
-                      <id>compile</id>
-                      <phase>process-resources</phase>
-                      <goals>
-                          <goal>run</goal>
-                      </goals>
-                      <configuration>
-                          <target>
-                              Download NPM dependencies
-                              <exec dir="${basedir}" executable="npm" failonerror="true">
-                                  <arg value="install" />
-                              </exec>
-                              <exec dir="${basedir}" executable="npm" failonerror="true">
-                                  <arg value="run-script" />
-                                  <arg value="build" />
-                              </exec>
-                              <!--todo it would be nice using gulp like in the CHE dashboard-->
-                          </target>
-                      </configuration>
-                  </execution>
-                  <execution>
-                      <id>compilation</id>
-                      <phase>test</phase>
-                      <goals>
-                          <goal>run</goal>
-                      </goals>
-                      <configuration>
-                          <target unless="skipTests">
-                              <!-- Run unit tests -->
-                              <exec dir="${basedir}" executable="npm" failonerror="true">
-                                  <arg value="test" />
-                              </exec>
-                          </target>
-                      </configuration>
-                  </execution>
-              </executions>
-          </plugin>
-          <plugin>
-            <artifactId>maven-resources-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>copy-resources</id>
-                <phase>process-classes</phase>
-                <goals>
-                  <goal>copy-resources</goal>
-                </goals>
+            <plugin>
+                <groupId>com.mycila</groupId>
+                <artifactId>license-maven-plugin</artifactId>
                 <configuration>
-                  <outputDirectory>${project.build.outputDirectory}</outputDirectory>
-                  <resources>
-                    <resource>
-                      <directory>${basedir}/build</directory>
-                      <filtering>false</filtering>
-                    </resource>
-                  </resources>
+                    <useDefaultExcludes>false</useDefaultExcludes>
+                    <excludes>
+                        <exclude>**</exclude>
+                        <!--Todo it's temporary solution-->
+                    </excludes>
                 </configuration>
-              </execution>
-            </executions>
-          </plugin>
+            </plugin>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>clean-up</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <delete dir="${basedir}/node_modules" />
+                                <delete dir="${basedir}/typings" />
+                                <delete dir="${basedir}/build" />
+                                <delete dir="${basedir}/lib" />
+                            </tasks>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>compile</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                Download NPM dependencies
+                                <exec dir="${basedir}" executable="npm" failonerror="true">
+                                    <arg value="install" />
+                                </exec>
+                                <exec dir="${basedir}" executable="npm" failonerror="true">
+                                    <arg value="run-script" />
+                                    <arg value="build" />
+                                </exec>
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>compilation</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target unless="skipTests">
+                                <!-- Run unit tests -->
+                                <exec dir="${basedir}" executable="npm" failonerror="true">
+                                    <arg value="test" />
+                                </exec>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/build</directory>
+                                    <filtering>false</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 </project>

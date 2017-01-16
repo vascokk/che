@@ -227,14 +227,10 @@ public class TerminalPresenter implements TabPresenter, TerminalView.ActionDeleg
     }
 
     @Override
-    public void fitTerminalSize() {
+    public void setTerminalSize(int x, int y) {
         if (!connected) {
             return;
         }
-
-        TerminalGeometryJso terminalGeometry = terminal.proposeGeometry();
-        int x = terminalGeometry.getCols();
-        int y = terminalGeometry.getRows();
 
         if (width == x && height == y) {
             return;

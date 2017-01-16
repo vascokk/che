@@ -32,6 +32,14 @@ class TerminalJso extends JavaScriptObject {
         this.open(element);
     }-*/;
 
+    public final native void fit() /*-{
+        this.fit();
+    }-*/;
+
+    public final native Element getElement() /*-{
+        return this.element;
+    }-*/;
+
     public final native TerminalGeometryJso proposeGeometry() /*-{
         return this.proposeGeometry();
     }-*/;
