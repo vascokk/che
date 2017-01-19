@@ -16,7 +16,7 @@
     <parent>
         <artifactId>che-agents-parent</artifactId>
         <groupId>org.eclipse.che</groupId>
-        <version>5.1.0-SNAPSHOT</version>
+        <version>5.2.0-SNAPSHOT</version>
     </parent>
     <artifactId>exec-agent</artifactId>
     <name>Exec Agent</name>
@@ -45,8 +45,8 @@
                         <exclude>src/static/term.js</exclude>
                         <exclude>src/static/index.html</exclude>
                         <exclude>src/.idea/**</exclude>
-                        <exclude>src/exec-agent</exclude>
-                        <exclide>src/exec-agent.iml</exclide>
+                        <exclude>src/exec</exclude>
+                        <exclude>src/*.iml</exclude>
                     </excludes>
                 </configuration>
             </plugin>
@@ -65,7 +65,7 @@
                                 <copy todir="${project.build.directory}/${go.workspace.name}/src">
                                     <fileset dir="./src/vendor/" includes="**/*" />
                                 </copy>
-                                <copy todir="${project.build.directory}/${go.workspace.name}/src/github.com/eclipse/che/agents/exec-agent">
+                                <copy todir="${project.build.directory}/${go.workspace.name}/src/github.com/eclipse/che/agents/exec">
                                     <fileset dir="./src/" excludes="vendor/ target/" includes="**/*.*go **/static/*" />
                                 </copy>
                             </target>
@@ -134,7 +134,7 @@
                                     <goal>exec</goal>
                                     <configuration>
                                         <executable>go</executable>
-                                        <workingDirectory>${project.build.directory}/${go.workspace.name}/src/github.com/eclipse/che/agents/exec-agent</workingDirectory>
+                                        <workingDirectory>${project.build.directory}/${go.workspace.name}/src/github.com/eclipse/che/agents/exec</workingDirectory>
                                         <arguments>
                                             <argument>build</argument>
                                             <argument>-a</argument>
@@ -208,7 +208,7 @@
                                 </goals>
                                 <configuration>
                                     <target unless="skipTests">
-                                        <exec dir="${project.build.directory}/${go.workspace.name}/src/github.com/eclipse/che/agents/exec-agent" executable="go" failonerror="true">
+                                        <exec dir="${project.build.directory}/${go.workspace.name}/src/github.com/eclipse/che/agents/exec" executable="go" failonerror="true">
                                             <env key="GOPATH" value="${project.build.directory}/${go.workspace.name}" />
                                             <arg value="test" />
                                             <arg value="-v" />
