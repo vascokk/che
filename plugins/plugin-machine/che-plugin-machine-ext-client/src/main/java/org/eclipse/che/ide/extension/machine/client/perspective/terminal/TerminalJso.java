@@ -59,10 +59,10 @@ class TerminalJso extends JavaScriptObject {
     }-*/;
 
     public final native void focus() /*-{
-        this.focus();
+        this.element.focus();
     }-*/;
 
     public final native void blur() /*-{
-        this.blur();
+        this.element.blur();
     }-*/;
 }

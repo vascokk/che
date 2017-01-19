@@ -110,6 +110,7 @@ function Terminal(options) {
   this.cols = options.cols || options.geometry[0];
   this.rows = options.rows || options.geometry[1];
   this.geometry = [this.cols, this.rows];
+  this.focusOnOpen = options.focusOnOpen;
 
   if (options.handler) {
     this.on('data', options.handler);
@@ -325,7 +326,8 @@ Terminal.defaults = {
   scrollback: 1000,
   screenKeys: false,
   debug: false,
-  cancelEvents: false
+  cancelEvents: false,
+  focusOnOpen: true
   // programFeatures: false,
   // focusKeys: false,
 };
@@ -592,7 +594,9 @@ Terminal.prototype.open = function(parent) {
   this.initGlobal();
 
   // Ensure there is a Terminal.focus.
-  this.focus();
+  if (this.focusOnOpen) {
+    this.focus();
+  }
 
   on(this.element, 'click', function() {
     var selection = document.getSelection(),

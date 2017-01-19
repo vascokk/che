@@ -159,15 +159,15 @@ public class TerminalPresenter implements TabPresenter, TerminalView.ActionDeleg
             @Override
             public void onOpen() {
                 JavaScriptObject terminalJso = moduleHolder.getModule("Xterm");
-                terminal = TerminalJso.create(terminalJso, TerminalOptionsJso.createDefault());
+                // if terminal was created programmatically then we don't set focus on it
+                TerminalOptionsJso terminalOptionsJso = TerminalOptionsJso.createDefault();
+                if (source instanceof AddTerminalClickHandler || source instanceof Action) {
+                    terminalOptionsJso.withFocusOnOpen(true);
+                }
+                terminal = TerminalJso.create(terminalJso, terminalOptionsJso);
                 connected = true;
 
                 view.openTerminal(terminal);
-
-                // if terminal was created programmatically then we don't set focus on it
-                if (source instanceof AddTerminalClickHandler || source instanceof Action) {
-                    setFocus(true);
-                }
 
                 terminal.on(DATA_EVENT_NAME, new Operation<String>() {
                     @Override
@@ -234,9 +234,6 @@ public class TerminalPresenter implements TabPresenter, TerminalView.ActionDeleg
 
         if (width == x && height == y) {
             return;
-        } else if (width > 0 && height > 0) {
-            //if it's not first initialization
-            setFocus(true);
         }
 
         terminal.resize(x, y);
@@ -250,17 +247,6 @@ public class TerminalPresenter implements TabPresenter, TerminalView.ActionDeleg
         jso.addField("type", "resize");
         jso.addField("data", arr);
         socket.send(jso.serialize());
-    }
-
-    @Override
-    public void setFocus(boolean focused) {
-        if (connected) {
-            if (focused) {
-                terminal.focus();
-            } else {
-                terminal.blur();
-            }
-        }
     }
 
     /**
