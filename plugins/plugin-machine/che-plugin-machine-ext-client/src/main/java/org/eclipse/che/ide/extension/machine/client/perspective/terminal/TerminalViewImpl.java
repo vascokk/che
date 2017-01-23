@@ -43,9 +43,8 @@ final class TerminalViewImpl extends Composite implements TerminalView, Requires
 
     private ActionDelegate delegate;
 
-    private double charWidth;
-    private double charHeight;
-    private Element termElem;
+    private TerminalJso terminal;
+    private Element terminalElement;
 
     public TerminalViewImpl() {
         initWidget(UI_BINDER.createAndBindUi(this));
@@ -61,37 +60,16 @@ final class TerminalViewImpl extends Composite implements TerminalView, Requires
     public void openTerminal(@NotNull final TerminalJso terminal) {
         unavailableLabel.setVisible(false);
 
+        this.terminal = terminal;
+        terminalElement = terminalPanel.getElement();
         terminalPanel.setVisible(true);
-        terminalPanel.getElement().getStyle().setProperty("opacity", "0");
+        terminalElement.getStyle().setProperty("opacity", "0");
 
         terminal.open(terminalPanel.getElement());
-        //terminal.fit();
 
-        TerminalGeometryJso termGeometry = terminal.proposeGeometry();
-
-        this.termElem  = terminal.getElement();
-        this.charWidth = getWidth()/termGeometry.getCols();
-        this.charHeight = getHeight()/termGeometry.getRows();
-
-        terminalPanel.getElement().getFirstChildElement().getStyle().clearProperty("backgroundColor");
-        terminalPanel.getElement().getFirstChildElement().getStyle().clearProperty("color");
-        terminalPanel.getElement().getStyle().clearProperty("opacity");
-    }
-
-    private int getWidth() {
-        if (termElem != null) {
-            int scrollWidth = 17;
-            Element parent = termElem.getParentElement();
-            return Math.max(0, parent.getOffsetWidth() - scrollWidth);
-        }
-        return 0;
-    }
-
-    private int getHeight() {
-        if (termElem != null) {
-            return termElem.getParentElement().getOffsetHeight();
-        }
-        return 0;
+        terminalElement.getFirstChildElement().getStyle().clearProperty("backgroundColor");
+        terminalElement.getFirstChildElement().getStyle().clearProperty("color");
+        terminalElement.getStyle().clearProperty("opacity");
     }
 
     /** {@inheritDoc} */
@@ -105,7 +83,7 @@ final class TerminalViewImpl extends Composite implements TerminalView, Requires
 
     @Override
     public void onResize() {
-        if (termElem != null) {
+        if (terminalElement != null) {
             resizeTimer.cancel();
             resizeTimer.schedule(200);
         }
@@ -119,16 +97,15 @@ final class TerminalViewImpl extends Composite implements TerminalView, Requires
     };
 
     private void resizeTerminal() {
-        int offsetWidth = getWidth();
-        int offsetHeight = getHeight();
-        if (offsetWidth <= 0 || offsetHeight <= 0) {
+        TerminalGeometryJso geometryJso = terminal.proposeGeometry();
+        int x = geometryJso.getCols();
+        int y = geometryJso.getRows();
+        if (x <= 0 || y <= 0) {
             resizeTimer.cancel();
             resizeTimer.schedule(500);
             return;
         }
 
-        int cols = (int)Math.floor(offsetWidth/charWidth);
-        int rows = (int)Math.floor(offsetHeight/charHeight);
-        delegate.setTerminalSize(cols, rows);
+        delegate.setTerminalSize(x, y);
     }
 }

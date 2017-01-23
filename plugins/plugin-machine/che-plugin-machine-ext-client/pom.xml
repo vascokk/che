@@ -191,27 +191,10 @@
                                     <version>${project.version}</version>
                                     <type>jar</type>
                                     <overWrite>false</overWrite>
+                                    <outputDirectory>${project.build.outputDirectory}/org/eclipse/che/ide/extension/machine/public/term</outputDirectory>
+                                    <excludes>org/**,META-INF/**</excludes>
                                 </artifactItem>
                             </artifactItems>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy-resources</id>
-                        <phase>process-classes</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <target>
-                                <copy todir="${project.build.outputDirectory}/org/eclipse/che/ide/extension/machine/public/term/">
-                                    <fileset dir="${project.build.directory}/dependency" includes="**/*" />
-                                </copy>
-                            </target>
                         </configuration>
                     </execution>
                 </executions>
