@@ -25,7 +25,7 @@ import javax.validation.constraints.NotNull;
 interface TerminalView extends View<TerminalView.ActionDelegate> {
 
     interface ActionDelegate {
-        void setTerminalSize(int cols, int rows);
+        void setTerminalSize(int x, int y);
     }
 
     /**
