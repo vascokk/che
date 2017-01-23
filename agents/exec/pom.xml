@@ -23,14 +23,6 @@
     <properties>
         <go.workspace.name>go-workspace</go.workspace.name>
     </properties>
-    <dependencies>
-        <dependency>
-            <groupId>org.eclipse.che.plugin</groupId>
-            <artifactId>plugin-terminal-ui</artifactId>
-            <type>jar</type>
-            <scope>runtime</scope>
-        </dependency>
-    </dependencies>
     <build>
         <plugins>
             <plugin>
@@ -42,8 +34,6 @@
                         <exclude>src/docs/**</exclude>
                         <exclude>src/vendor/**</exclude>
                         <exclude>src/Godeps/**</exclude>
-                        <exclude>src/static/term.js</exclude>
-                        <exclude>src/static/index.html</exclude>
                         <exclude>src/.idea/**</exclude>
                         <exclude>src/exec</exclude>
                         <exclude>src/*.iml</exclude>
