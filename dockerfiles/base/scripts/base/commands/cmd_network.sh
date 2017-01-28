@@ -17,19 +17,21 @@ cmd_network() {
   info "--------   CONNECTIVITY TEST   --------"
   info "---------------------------------------"
 
+  info "network" "eclipse/che-ip: ${GLOBAL_HOST_IP}"
+
   start_test_server
 
-  info "Browser    => Workspace Agent (localhost): Connection $(test1 && echo "succeeded" || echo "failed")"
-  info "Browser    => Workspace Agent ($AGENT_EXTERNAL_IP): Connection $(test2 && echo "succeeded" || echo "failed")"
-  info "Server     => Workspace Agent (External IP): Connection $(test3 && echo "succeeded" || echo "failed")"
-  info "Server     => Workspace Agent (Internal IP): Connection $(test4 && echo "succeeded" || echo "failed")"
+  info "network" "Browser => Workspace Agent (localhost): Connection $(test1 && echo "succeeded" || echo "failed")"
+  info "network" "Browser => Workspace Agent ($AGENT_EXTERNAL_IP): Connection $(test2 && echo "succeeded" || echo "failed")"
+  info "network" "Server  => Workspace Agent (External IP): Connection $(test3 && echo "succeeded" || echo "failed")"
+  info "network" "Server  => Workspace Agent (Internal IP): Connection $(test4 && echo "succeeded" || echo "failed")"
 
   stop_test_server
 }
 
 start_test_server() {
   export AGENT_INTERNAL_PORT=80
-  export AGENT_EXTERNAL_PORT=12345
+  export AGENT_EXTERNAL_PORT=32768
 
   # Start mini httpd server to run simulated tests
   docker run -d -p $AGENT_EXTERNAL_PORT:$AGENT_INTERNAL_PORT --name fakeagent \
