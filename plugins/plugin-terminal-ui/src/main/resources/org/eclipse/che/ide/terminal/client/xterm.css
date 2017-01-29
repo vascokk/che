@@ -87,8 +87,8 @@
     color: outputBackgroundColor;
 }
 
-/*TODO it's does not work in the GWT*/
-.terminal:not(.focus) .terminal-cursor {
+/* Warning: GWT contains bug with parsing CSS pseudo selectors, so we escapes this elements by "\" */
+.terminal:not\(\.focus\) .terminal-cursor {
     outline: 1px solid blueIconColor;
     outline-offset: -1px;
     background-color: transparent;
