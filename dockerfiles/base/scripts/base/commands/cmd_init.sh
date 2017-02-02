@@ -12,7 +12,7 @@
 cmd_init() {
 
   # set an initial value for the flag
-  if is_nightly && ! is_fast; then 
+  if is_nightly && ! is_fast && ! skip_pull; then 
     FORCE_UPDATE="--pull"
   else
     FORCE_UPDATE="--no-force"
@@ -89,7 +89,7 @@ cmd_init() {
       INIT_RUN_PARAMETERS+=" -v \"${CHE_HOST_DEVELOPMENT_REPO}/dockerfiles/init/manifests/${CHE_MINI_PRODUCT_NAME}.env\":/etc/puppet/manifests/${CHE_MINI_PRODUCT_NAME}.env"
     fi
   fi
-  GENERATE_INIT_COMMAND="docker_run -v ${CHE_HOST_CONFIG}:/copy ${INIT_RUN_PARAMETERS} $IMAGE_INIT"
+  GENERATE_INIT_COMMAND="docker_run -v \"${CHE_HOST_CONFIG}\":/copy ${INIT_RUN_PARAMETERS} $IMAGE_INIT"
   log $GENERATE_INIT_COMMAND
   eval $GENERATE_INIT_COMMAND
 
