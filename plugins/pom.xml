@@ -33,7 +33,6 @@
         <module>plugin-debugger</module>
         <module>plugin-java</module>
         <module>plugin-java-debugger</module>
-        <module>plugin-java-test-runner</module>
         <module>plugin-maven</module>
         <module>plugin-gdb</module>
         <module>plugin-sdk</module>
@@ -55,6 +54,8 @@
         <module>plugin-json</module>
         <module>plugin-composer</module>
         <module>plugin-zend-debugger</module>
+        <module>plugin-testing</module>
+        <module>plugin-testing-java</module>
         <module>plugin-terminal-ui</module>
     </modules>
 </project>
