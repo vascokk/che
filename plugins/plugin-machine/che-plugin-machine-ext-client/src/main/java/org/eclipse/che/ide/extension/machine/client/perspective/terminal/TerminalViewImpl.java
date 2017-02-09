@@ -83,8 +83,9 @@ final class TerminalViewImpl extends Composite implements TerminalView, Requires
 
     @Override
     public void onResize() {
-        if (terminalElement != null) {
-            resizeTimer.cancel();
+        resizeTimer.cancel();
+
+        if (terminalElement != null && isVisible()) {
             resizeTimer.schedule(200);
         }
     }
