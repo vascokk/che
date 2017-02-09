@@ -150,6 +150,7 @@ public class TerminalPresenter implements TabPresenter, TerminalView.ActionDeleg
             @Override
             public void onClose(WebSocketClosedEvent event) {
                 if (CLOSE_NORMAL == event.getCode()) {
+                    connected = false;
                     terminalStateListener.onExit();
                 }
             }

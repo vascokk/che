@@ -188,6 +188,8 @@ function Terminal(options) {
   this.refreshEnd;
   this.savedX;
   this.savedY;
+  this.normalSavedX;
+  this.normalSavedY;
   this.savedCols;
 
   // stream
@@ -4314,6 +4316,7 @@ Terminal.prototype.resetMode = function(params) {
           //   this.y = this.savedY;
           // }
           this.refresh(0, this.rows - 1);
+          this.viewport.syncScrollArea();
           this.showCursor();
         }
         break;
@@ -4342,8 +4345,13 @@ Terminal.prototype.setScrollRegion = function(params) {
  *   Save cursor (ANSI.SYS).
  */
 Terminal.prototype.saveCursor = function(params) {
-  this.savedX = this.x;
-  this.savedY = this.y;
+  if (this.normal) {
+    this.normalSavedX = this.x;
+    this.normalSavedY = this.y;
+  } else {
+    this.savedX = this.x;
+    this.savedY = this.y;
+  }
 };
 
 
@@ -4352,8 +4360,13 @@ Terminal.prototype.saveCursor = function(params) {
  *   Restore cursor (ANSI.SYS).
  */
 Terminal.prototype.restoreCursor = function(params) {
-  this.x = this.savedX || 0;
-  this.y = this.savedY || 0;
+  if (this.normal) {
+    this.x = this.normalSavedX || 0;
+    this.y = this.normalSavedY || 0;
+  } else {
+    this.x = this.savedX || 0;
+    this.y = this.savedY || 0;
+  }
 };
 
 
