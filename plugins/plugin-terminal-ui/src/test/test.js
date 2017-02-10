@@ -1,5 +1,6 @@
 var assert = require('chai').assert;
 var expect = require('chai').expect;
+var jsdom = require('mocha-jsdom');
 var Terminal = require('../xterm');
 
 describe('xterm.js', function() {
@@ -899,4 +900,21 @@ describe('xterm.js', function() {
       assert.equal(getTextFromLine(xterm.lines, 4), "root@2e5435072925:/terminal#                                                   ");
     });
   });
+
+  function createDiv() {
+    var div = document.createElement("div");
+    div.setAttribute("id", "mydiv");
+    div.className = "mdiv";
+    div.style.display = "none";
+    return document.body.appendChild(div);
+  }
+
+  function getTextFromLine(lines, linNumber) {
+    var text = "";
+    for (var i = 0; i < lines[linNumber].length - 1; i++) {
+      text += lines[linNumber][i][1];
+    }
+    console.log("text " + text);
+    return text;
+  }
 });

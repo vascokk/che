@@ -81,6 +81,13 @@ final class TerminalViewImpl extends Composite implements TerminalView, Requires
         terminalPanel.setVisible(false);
     }
 
+    /**
+     * Resize {@link TerminalJso} to current widget size.
+     * To improve performance we should resize only visible terminals,
+     * because "resize terminal" is quite expensive operation. When you
+     * click on the tab to activate hidden terminal this method will be
+     * executed too, so terminal will be resized anyway.
+     */
     @Override
     public void onResize() {
         resizeTimer.cancel();
