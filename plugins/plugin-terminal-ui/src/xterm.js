@@ -4566,7 +4566,7 @@ Terminal.prototype.softReset = function(params) {
   this.cursorHidden = false;
   this.insertMode = false;
   this.originMode = false;
-  this.wraparoundMode = false; // autowrap
+  this.wraparoundMode = true; // autowrap
   this.applicationKeypad = false; // ?
   this.viewport.syncScrollArea();
   this.applicationCursor = false;
