@@ -10,10 +10,10 @@
  * @license MIT
  */
 
-import { CompositionHelper } from './CompositionHelper';
-import { EventEmitter } from './EventEmitter';
-import { Viewport } from './Viewport';
-import { rightClickHandler, pasteHandler, copyHandler } from './handlers/Clipboard';
+import { CompositionHelper } from './CompositionHelper.js';
+import { EventEmitter } from './EventEmitter.js';
+import { Viewport } from './Viewport.js';
+import { rightClickHandler, pasteHandler, copyHandler } from './handlers/Clipboard.js';
 import * as Browser from './utils/Browser';
 import * as Keyboard from './utils/Keyboard';
 
@@ -104,13 +104,12 @@ function Terminal(options) {
   // this.context = options.context || window;
   // this.document = options.document || document;
   this.parent = options.body || options.parent || (
-    document ? document.getElementsByTagName('body')[0] : null
-  );
+      document ? document.getElementsByTagName('body')[0] : null
+    );
 
   this.cols = options.cols || options.geometry[0];
   this.rows = options.rows || options.geometry[1];
   this.geometry = [this.cols, this.rows];
-  this.focusOnOpen = options.focusOnOpen;
 
   if (options.handler) {
     this.on('data', options.handler);
@@ -188,8 +187,6 @@ function Terminal(options) {
   this.refreshEnd;
   this.savedX;
   this.savedY;
-  this.normalSavedX;
-  this.normalSavedY;
   this.savedCols;
 
   // stream
@@ -264,8 +261,8 @@ Terminal.tangoColors = [
 // Much thanks to TooTallNate for writing this.
 Terminal.colors = (function() {
   var colors = Terminal.tangoColors.slice()
-  , r = [0x00, 0x5f, 0x87, 0xaf, 0xd7, 0xff]
-  , i;
+    , r = [0x00, 0x5f, 0x87, 0xaf, 0xd7, 0xff]
+    , i;
 
   // 16-231
   i = 0;
@@ -296,9 +293,9 @@ Terminal._colors = Terminal.colors.slice();
 
 Terminal.vcolors = (function() {
   var out = []
-  , colors = Terminal.colors
-  , i = 0
-  , color;
+    , colors = Terminal.colors
+    , i = 0
+    , color;
 
   for (; i < 256; i++) {
     color = parseInt(colors[i].substring(1), 16);
@@ -328,8 +325,7 @@ Terminal.defaults = {
   scrollback: 1000,
   screenKeys: false,
   debug: false,
-  cancelEvents: false,
-  focusOnOpen: true
+  cancelEvents: false
   // programFeatures: false,
   // focusKeys: false,
 };
@@ -596,14 +592,12 @@ Terminal.prototype.open = function(parent) {
   this.initGlobal();
 
   // Ensure there is a Terminal.focus.
-  if (this.focusOnOpen) {
-    this.focus();
-  }
+  this.focus();
 
   on(this.element, 'click', function() {
     var selection = document.getSelection(),
-        collapsed = selection.isCollapsed,
-        isRange = typeof collapsed == 'boolean' ? !collapsed : selection.type == 'Range';
+      collapsed = selection.isCollapsed,
+      isRange = typeof collapsed == 'boolean' ? !collapsed : selection.type == 'Range';
     if (!isRange) {
       self.focus();
     }
@@ -665,7 +659,7 @@ Terminal.prototype.bindMouse = function() {
   // wheel up: ^[[M`3>
   function sendButton(ev) {
     var button
-    , pos;
+      , pos;
 
     // get the xterm-style button
     button = getButton(ev);
@@ -697,7 +691,7 @@ Terminal.prototype.bindMouse = function() {
   // ^[[M 3<^[[M@4<^[[M@5<^[[M@6<^[[M@7<^[[M#7<
   function sendMove(ev) {
     var button = pressed
-    , pos;
+      , pos;
 
     pos = getCoords(ev);
     if (!pos) return;
@@ -768,16 +762,16 @@ Terminal.prototype.bindMouse = function() {
       else if (button === 2) button = 6;
       else if (button === 3) button = 3;
       self.send('\x1b['
-                + button
-                + ';'
-                + (button === 3 ? 4 : 0)
-                + ';'
-                + pos.y
-                + ';'
-                + pos.x
-                + ';'
-                + (pos.page || 0)
-                + '&w');
+        + button
+        + ';'
+        + (button === 3 ? 4 : 0)
+        + ';'
+        + pos.y
+        + ';'
+        + pos.x
+        + ';'
+        + (pos.page || 0)
+        + '&w');
       return;
     }
 
@@ -794,12 +788,12 @@ Terminal.prototype.bindMouse = function() {
       pos.x -= 32;
       pos.y -= 32;
       self.send('\x1b[<'
-                + (((button & 3) === 3 ? button & ~3 : button) - 32)
-                + ';'
-                + pos.x
-                + ';'
-                + pos.y
-                + ((button & 3) === 3 ? 'm' : 'M'));
+        + (((button & 3) === 3 ? button & ~3 : button) - 32)
+        + ';'
+        + pos.x
+        + ';'
+        + pos.y
+        + ((button & 3) === 3 ? 'm' : 'M'));
       return;
     }
 
@@ -814,10 +808,10 @@ Terminal.prototype.bindMouse = function() {
 
   function getButton(ev) {
     var button
-    , shift
-    , meta
-    , ctrl
-    , mod;
+      , shift
+      , meta
+      , ctrl
+      , mod;
 
     // two low bits:
     // 0 = left
@@ -830,9 +824,9 @@ Terminal.prototype.bindMouse = function() {
       case 'mousedown':
         button = ev.button != null
           ? +ev.button
-        : ev.which != null
-          ? ev.which - 1
-        : null;
+          : ev.which != null
+            ? ev.which - 1
+            : null;
 
         if (self.browser.isMSIE) {
           button = button === 1 ? 0 : button === 4 ? 1 : button;
@@ -844,12 +838,12 @@ Terminal.prototype.bindMouse = function() {
       case 'DOMMouseScroll':
         button = ev.detail < 0
           ? 64
-        : 65;
+          : 65;
         break;
       case 'wheel':
         button = ev.wheelDeltaY > 0
           ? 64
-        : 65;
+          : 65;
         break;
     }
 
@@ -892,7 +886,7 @@ Terminal.prototype.bindMouse = function() {
       y -= el.offsetTop;
       el = 'offsetParent' in el
         ? el.offsetParent
-      : el.parentNode;
+        : el.parentNode;
     }
 
     // convert to cols/rows
@@ -960,8 +954,8 @@ Terminal.prototype.bindMouse = function() {
   on(el, 'wheel', function(ev) {
     if (!self.mouseEvents) return;
     if (self.x10Mouse
-        || self.vt300Mouse
-        || self.decLocator) return;
+      || self.vt300Mouse
+      || self.decLocator) return;
     sendButton(ev);
     return self.cancel(ev);
   });
@@ -1088,8 +1082,8 @@ Terminal.prototype.refresh = function(start, end, queue) {
     out = '';
 
     if (this.y === y - (this.ybase - this.ydisp)
-        && this.cursorState
-        && !this.cursorHidden) {
+      && this.cursorState
+      && !this.cursorHidden) {
       x = this.x;
     } else {
       x = -1;
@@ -1490,8 +1484,8 @@ Terminal.prototype.write = function(data) {
                   // we have to adjust the second last cell as well
                   var removed = this.lines[this.y + this.ybase].pop();
                   if (removed[2]===0
-                      && this.lines[row][this.cols-2]
-                      && this.lines[row][this.cols-2][2]===2)
+                    && this.lines[row][this.cols-2]
+                    && this.lines[row][this.cols-2][2]===2)
                     this.lines[row][this.cols-2] = [this.curAttr, ' ', 1];
 
                   // insert empty cell at cursor
@@ -1916,9 +1910,9 @@ Terminal.prototype.write = function(data) {
             }
             break;
 
-            /**
-             * Additions
-             */
+          /**
+           * Additions
+           */
 
           // CSI Ps @
           // Insert Ps (Blank) Character(s) (default = 1) (ICH).
@@ -2038,9 +2032,9 @@ Terminal.prototype.write = function(data) {
             this.restoreCursor(this.params);
             break;
 
-            /**
-             * Lesser Used
-             */
+          /**
+           * Lesser Used
+           */
 
           // CSI Ps I
           // Cursor Forward Tabulation Ps tab stops (default = 1) (CHT).
@@ -2086,198 +2080,198 @@ Terminal.prototype.write = function(data) {
             this.tabClear(this.params);
             break;
 
-            // CSI Pm i  Media Copy (MC).
-            // CSI ? Pm i
-            // case 'i':
-            //   this.mediaCopy(this.params);
-            //   break;
+          // CSI Pm i  Media Copy (MC).
+          // CSI ? Pm i
+          // case 'i':
+          //   this.mediaCopy(this.params);
+          //   break;
 
-            // CSI Pm m  Character Attributes (SGR).
-            // CSI > Ps; Ps m
-            // case 'm': // duplicate
-            //   if (this.prefix === '>') {
-            //     this.setResources(this.params);
-            //   } else {
-            //     this.charAttributes(this.params);
-            //   }
-            //   break;
+          // CSI Pm m  Character Attributes (SGR).
+          // CSI > Ps; Ps m
+          // case 'm': // duplicate
+          //   if (this.prefix === '>') {
+          //     this.setResources(this.params);
+          //   } else {
+          //     this.charAttributes(this.params);
+          //   }
+          //   break;
 
-            // CSI Ps n  Device Status Report (DSR).
-            // CSI > Ps n
-            // case 'n': // duplicate
-            //   if (this.prefix === '>') {
-            //     this.disableModifiers(this.params);
-            //   } else {
-            //     this.deviceStatus(this.params);
-            //   }
-            //   break;
+          // CSI Ps n  Device Status Report (DSR).
+          // CSI > Ps n
+          // case 'n': // duplicate
+          //   if (this.prefix === '>') {
+          //     this.disableModifiers(this.params);
+          //   } else {
+          //     this.deviceStatus(this.params);
+          //   }
+          //   break;
 
-            // CSI > Ps p  Set pointer mode.
-            // CSI ! p   Soft terminal reset (DECSTR).
-            // CSI Ps$ p
-            //   Request ANSI mode (DECRQM).
-            // CSI ? Ps$ p
-            //   Request DEC private mode (DECRQM).
-            // CSI Ps ; Ps " p
+          // CSI > Ps p  Set pointer mode.
+          // CSI ! p   Soft terminal reset (DECSTR).
+          // CSI Ps$ p
+          //   Request ANSI mode (DECRQM).
+          // CSI ? Ps$ p
+          //   Request DEC private mode (DECRQM).
+          // CSI Ps ; Ps " p
           case 'p':
             switch (this.prefix) {
-                // case '>':
-                //   this.setPointerMode(this.params);
-                //   break;
+              // case '>':
+              //   this.setPointerMode(this.params);
+              //   break;
               case '!':
                 this.softReset(this.params);
                 break;
-                // case '?':
-                //   if (this.postfix === '$') {
-                //     this.requestPrivateMode(this.params);
-                //   }
-                //   break;
-                // default:
-                //   if (this.postfix === '"') {
-                //     this.setConformanceLevel(this.params);
-                //   } else if (this.postfix === '$') {
-                //     this.requestAnsiMode(this.params);
-                //   }
-                //   break;
+              // case '?':
+              //   if (this.postfix === '$') {
+              //     this.requestPrivateMode(this.params);
+              //   }
+              //   break;
+              // default:
+              //   if (this.postfix === '"') {
+              //     this.setConformanceLevel(this.params);
+              //   } else if (this.postfix === '$') {
+              //     this.requestAnsiMode(this.params);
+              //   }
+              //   break;
             }
             break;
 
-            // CSI Ps q  Load LEDs (DECLL).
-            // CSI Ps SP q
-            // CSI Ps " q
-            // case 'q':
-            //   if (this.postfix === ' ') {
-            //     this.setCursorStyle(this.params);
-            //     break;
-            //   }
-            //   if (this.postfix === '"') {
-            //     this.setCharProtectionAttr(this.params);
-            //     break;
-            //   }
-            //   this.loadLEDs(this.params);
-            //   break;
+          // CSI Ps q  Load LEDs (DECLL).
+          // CSI Ps SP q
+          // CSI Ps " q
+          // case 'q':
+          //   if (this.postfix === ' ') {
+          //     this.setCursorStyle(this.params);
+          //     break;
+          //   }
+          //   if (this.postfix === '"') {
+          //     this.setCharProtectionAttr(this.params);
+          //     break;
+          //   }
+          //   this.loadLEDs(this.params);
+          //   break;
 
-            // CSI Ps ; Ps r
-            //   Set Scrolling Region [top;bottom] (default = full size of win-
-            //   dow) (DECSTBM).
-            // CSI ? Pm r
-            // CSI Pt; Pl; Pb; Pr; Ps$ r
-            // case 'r': // duplicate
-            //   if (this.prefix === '?') {
-            //     this.restorePrivateValues(this.params);
-            //   } else if (this.postfix === '$') {
-            //     this.setAttrInRectangle(this.params);
-            //   } else {
-            //     this.setScrollRegion(this.params);
-            //   }
-            //   break;
+          // CSI Ps ; Ps r
+          //   Set Scrolling Region [top;bottom] (default = full size of win-
+          //   dow) (DECSTBM).
+          // CSI ? Pm r
+          // CSI Pt; Pl; Pb; Pr; Ps$ r
+          // case 'r': // duplicate
+          //   if (this.prefix === '?') {
+          //     this.restorePrivateValues(this.params);
+          //   } else if (this.postfix === '$') {
+          //     this.setAttrInRectangle(this.params);
+          //   } else {
+          //     this.setScrollRegion(this.params);
+          //   }
+          //   break;
 
-            // CSI s     Save cursor (ANSI.SYS).
-            // CSI ? Pm s
-            // case 's': // duplicate
-            //   if (this.prefix === '?') {
-            //     this.savePrivateValues(this.params);
-            //   } else {
-            //     this.saveCursor(this.params);
-            //   }
-            //   break;
+          // CSI s     Save cursor (ANSI.SYS).
+          // CSI ? Pm s
+          // case 's': // duplicate
+          //   if (this.prefix === '?') {
+          //     this.savePrivateValues(this.params);
+          //   } else {
+          //     this.saveCursor(this.params);
+          //   }
+          //   break;
 
-            // CSI Ps ; Ps ; Ps t
-            // CSI Pt; Pl; Pb; Pr; Ps$ t
-            // CSI > Ps; Ps t
-            // CSI Ps SP t
-            // case 't':
-            //   if (this.postfix === '$') {
-            //     this.reverseAttrInRectangle(this.params);
-            //   } else if (this.postfix === ' ') {
-            //     this.setWarningBellVolume(this.params);
-            //   } else {
-            //     if (this.prefix === '>') {
-            //       this.setTitleModeFeature(this.params);
-            //     } else {
-            //       this.manipulateWindow(this.params);
-            //     }
-            //   }
-            //   break;
+          // CSI Ps ; Ps ; Ps t
+          // CSI Pt; Pl; Pb; Pr; Ps$ t
+          // CSI > Ps; Ps t
+          // CSI Ps SP t
+          // case 't':
+          //   if (this.postfix === '$') {
+          //     this.reverseAttrInRectangle(this.params);
+          //   } else if (this.postfix === ' ') {
+          //     this.setWarningBellVolume(this.params);
+          //   } else {
+          //     if (this.prefix === '>') {
+          //       this.setTitleModeFeature(this.params);
+          //     } else {
+          //       this.manipulateWindow(this.params);
+          //     }
+          //   }
+          //   break;
 
-            // CSI u     Restore cursor (ANSI.SYS).
-            // CSI Ps SP u
-            // case 'u': // duplicate
-            //   if (this.postfix === ' ') {
-            //     this.setMarginBellVolume(this.params);
-            //   } else {
-            //     this.restoreCursor(this.params);
-            //   }
-            //   break;
+          // CSI u     Restore cursor (ANSI.SYS).
+          // CSI Ps SP u
+          // case 'u': // duplicate
+          //   if (this.postfix === ' ') {
+          //     this.setMarginBellVolume(this.params);
+          //   } else {
+          //     this.restoreCursor(this.params);
+          //   }
+          //   break;
 
-            // CSI Pt; Pl; Pb; Pr; Pp; Pt; Pl; Pp$ v
-            // case 'v':
-            //   if (this.postfix === '$') {
-            //     this.copyRectagle(this.params);
-            //   }
-            //   break;
+          // CSI Pt; Pl; Pb; Pr; Pp; Pt; Pl; Pp$ v
+          // case 'v':
+          //   if (this.postfix === '$') {
+          //     this.copyRectagle(this.params);
+          //   }
+          //   break;
 
-            // CSI Pt ; Pl ; Pb ; Pr ' w
-            // case 'w':
-            //   if (this.postfix === '\'') {
-            //     this.enableFilterRectangle(this.params);
-            //   }
-            //   break;
+          // CSI Pt ; Pl ; Pb ; Pr ' w
+          // case 'w':
+          //   if (this.postfix === '\'') {
+          //     this.enableFilterRectangle(this.params);
+          //   }
+          //   break;
 
-            // CSI Ps x  Request Terminal Parameters (DECREQTPARM).
-            // CSI Ps x  Select Attribute Change Extent (DECSACE).
-            // CSI Pc; Pt; Pl; Pb; Pr$ x
-            // case 'x':
-            //   if (this.postfix === '$') {
-            //     this.fillRectangle(this.params);
-            //   } else {
-            //     this.requestParameters(this.params);
-            //     //this.__(this.params);
-            //   }
-            //   break;
+          // CSI Ps x  Request Terminal Parameters (DECREQTPARM).
+          // CSI Ps x  Select Attribute Change Extent (DECSACE).
+          // CSI Pc; Pt; Pl; Pb; Pr$ x
+          // case 'x':
+          //   if (this.postfix === '$') {
+          //     this.fillRectangle(this.params);
+          //   } else {
+          //     this.requestParameters(this.params);
+          //     //this.__(this.params);
+          //   }
+          //   break;
 
-            // CSI Ps ; Pu ' z
-            // CSI Pt; Pl; Pb; Pr$ z
-            // case 'z':
-            //   if (this.postfix === '\'') {
-            //     this.enableLocatorReporting(this.params);
-            //   } else if (this.postfix === '$') {
-            //     this.eraseRectangle(this.params);
-            //   }
-            //   break;
+          // CSI Ps ; Pu ' z
+          // CSI Pt; Pl; Pb; Pr$ z
+          // case 'z':
+          //   if (this.postfix === '\'') {
+          //     this.enableLocatorReporting(this.params);
+          //   } else if (this.postfix === '$') {
+          //     this.eraseRectangle(this.params);
+          //   }
+          //   break;
 
-            // CSI Pm ' {
-            // CSI Pt; Pl; Pb; Pr$ {
-            // case '{':
-            //   if (this.postfix === '\'') {
-            //     this.setLocatorEvents(this.params);
-            //   } else if (this.postfix === '$') {
-            //     this.selectiveEraseRectangle(this.params);
-            //   }
-            //   break;
+          // CSI Pm ' {
+          // CSI Pt; Pl; Pb; Pr$ {
+          // case '{':
+          //   if (this.postfix === '\'') {
+          //     this.setLocatorEvents(this.params);
+          //   } else if (this.postfix === '$') {
+          //     this.selectiveEraseRectangle(this.params);
+          //   }
+          //   break;
 
-            // CSI Ps ' |
-            // case '|':
-            //   if (this.postfix === '\'') {
-            //     this.requestLocatorPosition(this.params);
-            //   }
-            //   break;
+          // CSI Ps ' |
+          // case '|':
+          //   if (this.postfix === '\'') {
+          //     this.requestLocatorPosition(this.params);
+          //   }
+          //   break;
 
-            // CSI P m SP }
-            // Insert P s Column(s) (default = 1) (DECIC), VT420 and up.
-            // case '}':
-            //   if (this.postfix === ' ') {
-            //     this.insertColumns(this.params);
-            //   }
-            //   break;
+          // CSI P m SP }
+          // Insert P s Column(s) (default = 1) (DECIC), VT420 and up.
+          // case '}':
+          //   if (this.postfix === ' ') {
+          //     this.insertColumns(this.params);
+          //   }
+          //   break;
 
-            // CSI P m SP ~
-            // Delete P s Column(s) (default = 1) (DECDC), VT420 and up
-            // case '~':
-            //   if (this.postfix === ' ') {
-            //     this.deleteColumns(this.params);
-            //   }
-            //   break;
+          // CSI P m SP ~
+          // Delete P s Column(s) (default = 1) (DECDC), VT420 and up
+          // case '~':
+          //   if (this.postfix === ' ') {
+          //     this.deleteColumns(this.params);
+          //   }
+          //   break;
 
           default:
             this.error('Unknown CSI code: %s.', ch);
@@ -2301,7 +2295,7 @@ Terminal.prototype.write = function(data) {
             // test: echo -e '\eP$q"p\e\\'
             case '$q':
               var pt = this.currentParam
-              , valid = false;
+                , valid = false;
 
               switch (pt) {
                 // DECSCA
@@ -2347,7 +2341,7 @@ Terminal.prototype.write = function(data) {
             // test: echo -ne '\eP+q6b64\e\\'
             case '+q':
               var pt = this.currentParam
-              , valid = false;
+                , valid = false;
 
               this.send('\x1bP' + +valid + '+r' + pt + '\x1b\\');
               break;
@@ -2777,8 +2771,8 @@ Terminal.prototype.keyPress = function(ev) {
   }
 
   if (!key || (
-    (ev.altKey || ev.ctrlKey || ev.metaKey) && !isThirdLevelShift(this, ev)
-  )) {
+      (ev.altKey || ev.ctrlKey || ev.metaKey) && !isThirdLevelShift(this, ev)
+    )) {
     return false;
   }
 
@@ -2850,16 +2844,12 @@ Terminal.prototype.error = function() {
  * @param {number} y The number of rows to resize to.
  */
 Terminal.prototype.resize = function(x, y) {
-  if (Number.isNaN(y) || Number.isNaN(x)) {
-    return;
-  }
-
   var line
-  , el
-  , i
-  , j
-  , ch
-  , addToY;
+    , el
+    , i
+    , j
+    , ch
+    , addToY;
 
   if (x === this.cols && y === this.rows) {
     return;
@@ -3014,7 +3004,7 @@ Terminal.prototype.prevStop = function(x) {
   while (!this.tabs[--x] && x > 0);
   return x >= this.cols
     ? this.cols - 1
-  : x < 0 ? 0 : x;
+    : x < 0 ? 0 : x;
 };
 
 
@@ -3027,7 +3017,7 @@ Terminal.prototype.nextStop = function(x) {
   while (!this.tabs[++x] && x < this.cols);
   return x >= this.cols
     ? this.cols - 1
-  : x < 0 ? 0 : x;
+    : x < 0 ? 0 : x;
 };
 
 
@@ -3038,7 +3028,7 @@ Terminal.prototype.nextStop = function(x) {
  */
 Terminal.prototype.eraseRight = function(x, y) {
   var line = this.lines[this.ybase + y]
-  , ch = [this.eraseAttr(), ' ', 1]; // xterm
+    , ch = [this.eraseAttr(), ' ', 1]; // xterm
 
 
   for (; x < this.cols; x++) {
@@ -3057,7 +3047,7 @@ Terminal.prototype.eraseRight = function(x, y) {
  */
 Terminal.prototype.eraseLeft = function(x, y) {
   var line = this.lines[this.ybase + y]
-  , ch = [this.eraseAttr(), ' ', 1]; // xterm
+    , ch = [this.eraseAttr(), ' ', 1]; // xterm
 
   x++;
   while (x--) line[x] = ch;
@@ -3099,12 +3089,12 @@ Terminal.prototype.eraseLine = function(y) {
  */
 Terminal.prototype.blankLine = function(cur) {
   var attr = cur
-  ? this.eraseAttr()
-  : this.defAttr;
+    ? this.eraseAttr()
+    : this.defAttr;
 
   var ch = [attr, ' ', 1]  // width defaults to 1 halfwidth character
-  , line = []
-  , i = 0;
+    , line = []
+    , i = 0;
 
   for (; i < this.cols; i++) {
     line[i] = ch;
@@ -3121,7 +3111,7 @@ Terminal.prototype.blankLine = function(cur) {
 Terminal.prototype.ch = function(cur) {
   return cur
     ? [this.eraseAttr(), ' ', 1]
-  : [this.defAttr, ' ', 1];
+    : [this.defAttr, ' ', 1];
 };
 
 
@@ -3451,11 +3441,11 @@ Terminal.prototype.charAttributes = function(params) {
   }
 
   var l = params.length
-  , i = 0
-  , flags = this.curAttr >> 18
-  , fg = (this.curAttr >> 9) & 0x1ff
-  , bg = this.curAttr & 0x1ff
-  , p;
+    , i = 0
+    , flags = this.curAttr >> 18
+    , fg = (this.curAttr >> 9) & 0x1ff
+    , bg = this.curAttr & 0x1ff
+    , p;
 
   for (; i < l; i++) {
     p = params[i];
@@ -3594,10 +3584,10 @@ Terminal.prototype.deviceStatus = function(params) {
       case 6:
         // cursor position
         this.send('\x1b['
-                  + (this.y + 1)
-                  + ';'
-                  + (this.x + 1)
-                  + 'R');
+          + (this.y + 1)
+          + ';'
+          + (this.x + 1)
+          + 'R');
         break;
     }
   } else if (this.prefix === '?') {
@@ -3607,10 +3597,10 @@ Terminal.prototype.deviceStatus = function(params) {
       case 6:
         // cursor position
         this.send('\x1b[?'
-                  + (this.y + 1)
-                  + ';'
-                  + (this.x + 1)
-                  + 'R');
+          + (this.y + 1)
+          + ';'
+          + (this.x + 1)
+          + 'R');
         break;
       case 15:
         // no printer
@@ -3861,8 +3851,8 @@ Terminal.prototype.sendDeviceAttributes = function(params) {
 
   if (!this.prefix) {
     if (this.is('xterm')
-        || this.is('rxvt-unicode')
-        || this.is('screen')) {
+      || this.is('rxvt-unicode')
+      || this.is('screen')) {
       this.send('\x1b[?1;2c');
     } else if (this.is('linux')) {
       this.send('\x1b[?6c');
@@ -4024,7 +4014,7 @@ Terminal.prototype.HVPosition = function(params) {
 Terminal.prototype.setMode = function(params) {
   if (typeof params === 'object') {
     var l = params.length
-    , i = 0;
+      , i = 0;
 
     for (; i < l; i++) {
       this.setMode(params[i]);
@@ -4073,10 +4063,10 @@ Terminal.prototype.setMode = function(params) {
         this.viewport.syncScrollArea();
         break;
       case 9: // X10 Mouse
-        // no release, no motion, no wheel, no modifiers.
+      // no release, no motion, no wheel, no modifiers.
       case 1000: // vt200 mouse
-        // no motion.
-        // no modifiers, except control on the wheel.
+      // no motion.
+      // no modifiers, except control on the wheel.
       case 1002: // button event mouse
       case 1003: // any event mouse
         // any event - sends motion events,
@@ -4229,7 +4219,7 @@ Terminal.prototype.setMode = function(params) {
 Terminal.prototype.resetMode = function(params) {
   if (typeof params === 'object') {
     var l = params.length
-    , i = 0;
+      , i = 0;
 
     for (; i < l; i++) {
       this.resetMode(params[i]);
@@ -4316,7 +4306,6 @@ Terminal.prototype.resetMode = function(params) {
           //   this.y = this.savedY;
           // }
           this.refresh(0, this.rows - 1);
-          this.viewport.syncScrollArea();
           this.showCursor();
         }
         break;
@@ -4345,13 +4334,8 @@ Terminal.prototype.setScrollRegion = function(params) {
  *   Save cursor (ANSI.SYS).
  */
 Terminal.prototype.saveCursor = function(params) {
-  if (this.normal) {
-    this.normalSavedX = this.x;
-    this.normalSavedY = this.y;
-  } else {
-    this.savedX = this.x;
-    this.savedY = this.y;
-  }
+  this.savedX = this.x;
+  this.savedY = this.y;
 };
 
 
@@ -4360,13 +4344,8 @@ Terminal.prototype.saveCursor = function(params) {
  *   Restore cursor (ANSI.SYS).
  */
 Terminal.prototype.restoreCursor = function(params) {
-  if (this.normal) {
-    this.x = this.normalSavedX || 0;
-    this.y = this.normalSavedY || 0;
-  } else {
-    this.x = this.savedX || 0;
-    this.y = this.savedY || 0;
-  }
+  this.x = this.savedX || 0;
+  this.y = this.savedY || 0;
 };
 
 
@@ -4461,8 +4440,8 @@ Terminal.prototype.cursorBackwardTab = function(params) {
  */
 Terminal.prototype.repeatPrecedingCharacter = function(params) {
   var param = params[0] || 1
-  , line = this.lines[this.ybase + this.y]
-  , ch = line[this.x - 1] || [this.defAttr, ' ', 1];
+    , line = this.lines[this.ybase + this.y]
+    , ch = line[this.x - 1] || [this.defAttr, ' ', 1];
 
   while (param--) line[this.x++] = ch;
 };
@@ -4566,7 +4545,7 @@ Terminal.prototype.softReset = function(params) {
   this.cursorHidden = false;
   this.insertMode = false;
   this.originMode = false;
-  this.wraparoundMode = true; // autowrap
+  this.wraparoundMode = false; // autowrap
   this.applicationKeypad = false; // ?
   this.viewport.syncScrollArea();
   this.applicationCursor = false;
@@ -4687,13 +4666,13 @@ Terminal.prototype.restorePrivateValues = function(params) {
  */
 Terminal.prototype.setAttrInRectangle = function(params) {
   var t = params[0]
-  , l = params[1]
-  , b = params[2]
-  , r = params[3]
-  , attr = params[4];
+    , l = params[1]
+    , b = params[2]
+    , r = params[3]
+    , attr = params[4];
 
   var line
-  , i;
+    , i;
 
   for (; t < b + 1; t++) {
     line = this.lines[this.ybase + t];
@@ -4717,13 +4696,13 @@ Terminal.prototype.setAttrInRectangle = function(params) {
  */
 Terminal.prototype.fillRectangle = function(params) {
   var ch = params[0]
-  , t = params[1]
-  , l = params[2]
-  , b = params[3]
-  , r = params[4];
+    , t = params[1]
+    , l = params[2]
+    , b = params[3]
+    , r = params[4];
 
   var line
-  , i;
+    , i;
 
   for (; t < b + 1; t++) {
     line = this.lines[this.ybase + t];
@@ -4767,13 +4746,13 @@ Terminal.prototype.enableLocatorReporting = function(params) {
  */
 Terminal.prototype.eraseRectangle = function(params) {
   var t = params[0]
-  , l = params[1]
-  , b = params[2]
-  , r = params[3];
+    , l = params[1]
+    , b = params[2]
+    , r = params[3];
 
   var line
-  , i
-  , ch;
+    , i
+    , ch;
 
   ch = [this.eraseAttr(), ' ', 1]; // xterm?
 
@@ -4797,9 +4776,9 @@ Terminal.prototype.eraseRectangle = function(params) {
  */
 Terminal.prototype.insertColumns = function() {
   var param = params[0]
-  , l = this.ybase + this.rows
-  , ch = [this.eraseAttr(), ' ', 1] // xterm?
-  , i;
+    , l = this.ybase + this.rows
+    , ch = [this.eraseAttr(), ' ', 1] // xterm?
+    , i;
 
   while (param--) {
     for (i = this.ybase; i < l; i++) {
@@ -4819,9 +4798,9 @@ Terminal.prototype.insertColumns = function() {
  */
 Terminal.prototype.deleteColumns = function() {
   var param = params[0]
-  , l = this.ybase + this.rows
-  , ch = [this.eraseAttr(), ' ', 1] // xterm?
-  , i;
+    , l = this.ybase + this.rows
+    , ch = [this.eraseAttr(), ' ', 1] // xterm?
+    , i;
 
   while (param--) {
     for (i = this.ybase; i < l; i++) {
@@ -4953,8 +4932,8 @@ function indexOf(obj, el) {
 
 function isThirdLevelShift(term, ev) {
   var thirdLevelKey =
-      (term.browser.isMac && ev.altKey && !ev.ctrlKey && !ev.metaKey) ||
-      (term.browser.isMSWindows && ev.altKey && ev.ctrlKey && !ev.metaKey);
+    (term.browser.isMac && ev.altKey && !ev.ctrlKey && !ev.metaKey) ||
+    (term.browser.isMSWindows && ev.altKey && ev.ctrlKey && !ev.metaKey);
 
   if (ev.type == 'keypress') {
     return thirdLevelKey;
@@ -4972,13 +4951,13 @@ function matchColor(r1, g1, b1) {
   }
 
   var ldiff = Infinity
-  , li = -1
-  , i = 0
-  , c
-  , r2
-  , g2
-  , b2
-  , diff;
+    , li = -1
+    , i = 0
+    , c
+    , r2
+    , g2
+    , b2
+    , diff;
 
   for (; i < Terminal.vcolors.length; i++) {
     c = Terminal.vcolors[i];
@@ -5112,22 +5091,22 @@ var wcwidth = (function(opts) {
     // if we arrive here, ucs is not a combining or C0/C1 control character
     return 1 +
       (
-      ucs >= 0x1100 &&
-      (
-        ucs <= 0x115f ||                // Hangul Jamo init. consonants
-        ucs == 0x2329 ||
-        ucs == 0x232a ||
-        (ucs >= 0x2e80 && ucs <= 0xa4cf && ucs != 0x303f) ||  // CJK..Yi
-        (ucs >= 0xac00 && ucs <= 0xd7a3) ||    // Hangul Syllables
-        (ucs >= 0xf900 && ucs <= 0xfaff) ||    // CJK Compat Ideographs
-        (ucs >= 0xfe10 && ucs <= 0xfe19) ||    // Vertical forms
-        (ucs >= 0xfe30 && ucs <= 0xfe6f) ||    // CJK Compat Forms
-        (ucs >= 0xff00 && ucs <= 0xff60) ||    // Fullwidth Forms
-        (ucs >= 0xffe0 && ucs <= 0xffe6) ||
-        (ucs >= 0x20000 && ucs <= 0x2fffd) ||
-        (ucs >= 0x30000 && ucs <= 0x3fffd)
-      )
-    );
+        ucs >= 0x1100 &&
+        (
+          ucs <= 0x115f ||                // Hangul Jamo init. consonants
+          ucs == 0x2329 ||
+          ucs == 0x232a ||
+          (ucs >= 0x2e80 && ucs <= 0xa4cf && ucs != 0x303f) ||  // CJK..Yi
+          (ucs >= 0xac00 && ucs <= 0xd7a3) ||    // Hangul Syllables
+          (ucs >= 0xf900 && ucs <= 0xfaff) ||    // CJK Compat Ideographs
+          (ucs >= 0xfe10 && ucs <= 0xfe19) ||    // Vertical forms
+          (ucs >= 0xfe30 && ucs <= 0xfe6f) ||    // CJK Compat Forms
+          (ucs >= 0xff00 && ucs <= 0xff60) ||    // Fullwidth Forms
+          (ucs >= 0xffe0 && ucs <= 0xffe6) ||
+          (ucs >= 0x20000 && ucs <= 0x2fffd) ||
+          (ucs >= 0x30000 && ucs <= 0x3fffd)
+        )
+      );
   }
   return wcwidth;
 })({nul: 0, control: 0});  // configurable options

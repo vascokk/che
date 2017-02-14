@@ -14,9 +14,6 @@
     "dist",
     "out",
     "test",
-    "node_modules",
-    "typings",
-    "target",
-    "./gulpfile.js"
+    "node_modules"
   ]
 }
