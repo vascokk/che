@@ -21,7 +21,6 @@
 @eval processBadgeBorderColor org.eclipse.che.ide.api.theme.Style.theme.processBadgeBorderColor();
 @eval getTooltipBackgroundColor org.eclipse.che.ide.api.theme.Style.theme.getTooltipBackgroundColor();
 @eval getPrimaryHighlightColor org.eclipse.che.ide.api.theme.Style.theme.getPrimaryHighlightColor();
-@eval blueIconColor org.eclipse.che.ide.api.theme.Style.theme.getBlueIconColor();
 
 .fullSize {
     width: 100% !important;
