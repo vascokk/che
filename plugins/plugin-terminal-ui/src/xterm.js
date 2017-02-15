@@ -2850,7 +2850,7 @@ Terminal.prototype.error = function() {
  * @param {number} y The number of rows to resize to.
  */
 Terminal.prototype.resize = function(x, y) {
-  if (Number.isNaN(y) || Number.isNaN(x)) {
+  if (isNaN(y) || isNaN(x)) {
     return;
   }
 
