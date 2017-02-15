@@ -28,10 +28,6 @@
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-user</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.google.gwt</groupId>
-            <artifactId>gwt-user</artifactId>
-        </dependency>
     </dependencies>
     <build>
         <sourceDirectory>src/main/java</sourceDirectory>
@@ -51,8 +47,18 @@
                 <configuration>
                     <useDefaultExcludes>false</useDefaultExcludes>
                     <excludes>
-                        <exclude>**</exclude>
-                        <!--Todo it's temporary solution-->
+                      <exclude>**/src/addons/**</exclude>
+                      <exclude>**/src/handlers/**</exclude>
+                      <exclude>**/src/main/resources/org/eclipse/che/ide/terminal/client/xterm.css</exclude>
+                      <exclude>**/src/test/**/**</exclude>
+                      <exclude>**/utils/**</exclude>
+                      <exclude>**/src/CompositionHelper.test.ts</exclude>
+                      <exclude>**/src/Viewport.ts</exclude>
+                      <exclude>**/src/CompositionHelper.ts</exclude>
+                      <exclude>**/src/EventEmitter.js</exclude>
+                      <exclude>**/src/xterm.js</exclude>
+                      <exclude>**/src/Interfaces.ts</exclude>
+                      <exclude>**/src/Viewport.test.ts</exclude>
                     </excludes>
                 </configuration>
             </plugin>
@@ -60,6 +66,7 @@
                 <artifactId>maven-antrun-plugin</artifactId>
                 <executions>
                     <execution>
+                        <!--clean-up build folders-->
                         <id>clean-up</id>
                         <phase>clean</phase>
                         <goals>
@@ -75,8 +82,9 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>compile</id>
-                        <phase>process-resources</phase>
+                        <!--compilation sources-->
+                        <id>compilation</id>
+                        <phase>compile</phase>
                         <goals>
                             <goal>run</goal>
                         </goals>
@@ -94,40 +102,34 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>compilation</id>
+                        <!--execute tests-->
+                        <id>test</id>
                         <phase>test</phase>
                         <goals>
                             <goal>run</goal>
                         </goals>
                         <configuration>
                             <target unless="skipTests">
-                                <!-- Run unit tests -->
                                 <exec dir="${basedir}" executable="npm" failonerror="true">
                                     <arg value="test" />
                                 </exec>
                             </target>
                         </configuration>
                     </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
-                <executions>
                     <execution>
-                        <id>copy-resources</id>
-                        <phase>process-classes</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.outputDirectory}</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${basedir}/build</directory>
-                                    <filtering>false</filtering>
-                                </resource>
-                            </resources>
-                        </configuration>
+                      <!--copy compiled terminal script to output directory-->
+                      <id>copy-xterm.js</id>
+                      <phase>process-classes</phase>
+                      <goals>
+                          <goal>run</goal>
+                      </goals>
+                      <configuration>
+                        <target name="copy xterm.js">
+                          <copy todir="${project.build.outputDirectory}">
+                              <fileset dir="${basedir}/build"/>
+                          </copy>
+                        </target>
+                      </configuration>
                     </execution>
                 </executions>
             </plugin>

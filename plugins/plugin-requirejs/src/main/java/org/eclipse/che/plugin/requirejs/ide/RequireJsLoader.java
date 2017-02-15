@@ -8,11 +8,11 @@
  * Contributors:
  *   Codenvy, S.A. - initial API and implementation
  *******************************************************************************/
-package org.eclipse.che.ide.requirejs;
+package org.eclipse.che.plugin.requirejs.ide;
 
 import javax.inject.Inject;
 
-import org.eclipse.che.ide.requirejs.conf.RequirejsConfig;
+import org.eclipse.che.plugin.requirejs.ide.config.RequirejsConfig;
 import org.eclipse.che.ide.util.loging.Log;
 import com.google.gwt.core.client.Callback;
 import com.google.gwt.core.client.GWT;

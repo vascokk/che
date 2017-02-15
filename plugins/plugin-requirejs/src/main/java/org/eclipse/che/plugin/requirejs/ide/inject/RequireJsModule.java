@@ -8,22 +8,23 @@
  * Contributors:
  *   Codenvy, S.A. - initial API and implementation
  *******************************************************************************/
-package org.eclipse.che.ide.requirejs;
+package org.eclipse.che.plugin.requirejs.ide.inject;
 
-import com.google.gwt.core.client.JsArray;
+import com.google.gwt.inject.client.AbstractGinModule;
+import org.eclipse.che.ide.api.extension.ExtensionGinModule;
+import org.eclipse.che.plugin.requirejs.ide.ModuleHolder;
+
+import javax.inject.Singleton;
 
 /**
- * Interface for requirejs completion callbacks.
- *
- * @author "Mickaël Leduque"
+ * @author Alexander Andrienko
  */
-public interface RequirejsCallback {
+@ExtensionGinModule
+public class RequireJsModule extends AbstractGinModule {
 
-    /**
-     * Executed when the required modules are loaded
-     *
-     * @param modules
-     *         the module instances
-     */
-    void onReady(JsArray<RequirejsModule> modules);
+    /** {@inheritDoc} */
+    @Override
+    protected void configure() {
+        bind(ModuleHolder.class).in(Singleton.class);
+    }
 }

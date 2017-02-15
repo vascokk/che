@@ -8,26 +8,27 @@
  * Contributors:
  *   Codenvy, S.A. - initial API and implementation
  *******************************************************************************/
-package org.eclipse.che.ide.requirejs.conf;
+package org.eclipse.che.plugin.requirejs.ide;
 
 import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.core.client.JsArrayString;
 
-public class AssocitativeJsObject<T> extends JavaScriptObject {
+import java.util.HashMap;
+import java.util.Map;
 
-    protected AssocitativeJsObject() {
+/**
+ * A store of reference to javascript objects.
+ *
+ * @author "Mickaël Leduque"
+ */
+public class ModuleHolder {
+
+    private Map<String, RequirejsModule> modules = new HashMap<>();
+
+    public JavaScriptObject getModule(final String key) {
+        return modules.get(key);
     }
 
-    public final native JsArrayString getKeys() /*-{
-        return this.getOwnPropertyNames();
-    }-*/;
-
-    public final native void put(String key, T value) /*-{
-        this[key] = value;
-    }-*/;
-
-    public final native T get(String key) /*-{
-        return this[key];
-    }-*/;
-
+    public void setModule(final String key, final RequirejsModule module) {
+        this.modules.put(key, module);
+    }
 }

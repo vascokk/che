@@ -8,10 +8,9 @@
  * Contributors:
  *   Codenvy, S.A. - initial API and implementation
  *******************************************************************************/
-package org.eclipse.che.ide.requirejs;
+package org.eclipse.che.plugin.requirejs.ide;
 
-import org.eclipse.che.ide.requirejs.conf.RequirejsConfig;
-
+import org.eclipse.che.plugin.requirejs.ide.config.RequirejsConfig;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArrayString;
 
@@ -48,11 +47,11 @@ public class Requirejs extends JavaScriptObject {
             args.forEach(function(module) {
                 param.push(module);
             });
-            callback.@org.eclipse.che.ide.requirejs.RequirejsCallback::onReady(Lcom/google/gwt/core/client/JsArray;)(param);
+            callback.@org.eclipse.che.plugin.requirejs.ide.RequirejsCallback::onReady(Lcom/google/gwt/core/client/JsArray;)(param);
         };
         var realErrHandler = function(err) {
             if (errorHandler) {
-                errorHandler.@org.eclipse.che.ide.requirejs.RequirejsErrorHandler::onError(Lorg/eclipse/che/ide/requirejs/RequirejsErrorHandler$RequireError;)(err);
+                errorHandler.@org.eclipse.che.plugin.requirejs.ide.RequirejsErrorHandler::onError(Lorg/eclipse/che/plugin/requirejs/ide/RequirejsErrorHandler$RequireError;)(err);
             } else {
                 $wnd.require.onError(err);
             }
@@ -87,7 +86,7 @@ public class Requirejs extends JavaScriptObject {
 
     public final native void setOnError(RequirejsErrorHandler handler) /*-{
         this.onError = function(err) {
-            handler.@org.eclipse.che.ide.requirejs.RequirejsErrorHandler::onError(Lorg/eclipse/che/ide/requirejs/RequirejsErrorHandler$RequireError;)(err);
+            handler.@org.eclipse.che.plugin.requirejs.ide.RequirejsErrorHandler::onError(Lorg/eclipse/che/plugin/requirejs/ide/RequirejsErrorHandler$RequireError;)(err);
         };
     }-*/;
 }

@@ -23,7 +23,6 @@ import org.eclipse.che.ide.editor.orion.client.OrionEditorBuilder;
 import org.eclipse.che.ide.editor.orion.client.OrionEditorWidget;
 import org.eclipse.che.ide.editor.orion.client.jso.OrionCodeEditWidgetOverlay;
 import org.eclipse.che.ide.editor.orion.client.jso.OrionEditorOptionsOverlay;
-import org.eclipse.che.ide.requirejs.ModuleHolder;
 
 @ExtensionGinModule
 public class OrionEditorGinModule extends AbstractGinModule {

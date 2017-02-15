@@ -8,27 +8,22 @@
  * Contributors:
  *   Codenvy, S.A. - initial API and implementation
  *******************************************************************************/
-package org.eclipse.che.ide.requirejs;
+package org.eclipse.che.plugin.requirejs.ide;
 
-import com.google.gwt.core.client.JavaScriptObject;
-
-import java.util.HashMap;
-import java.util.Map;
+import com.google.gwt.core.client.JsArray;
 
 /**
- * A store of reference to javascript objects.
+ * Interface for requirejs completion callbacks.
  *
  * @author "Mickaël Leduque"
  */
-public class ModuleHolder {
+public interface RequirejsCallback {
 
-    private Map<String, RequirejsModule> modules = new HashMap<>();
-
-    public JavaScriptObject getModule(final String key) {
-        return modules.get(key);
-    }
-
-    public void setModule(final String key, final RequirejsModule module) {
-        this.modules.put(key, module);
-    }
+    /**
+     * Executed when the required modules are loaded
+     *
+     * @param modules
+     *         the module instances
+     */
+    void onReady(JsArray<RequirejsModule> modules);
 }

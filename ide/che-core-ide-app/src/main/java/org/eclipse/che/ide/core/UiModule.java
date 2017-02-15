@@ -28,7 +28,6 @@ import org.eclipse.che.ide.menu.MainMenuView;
 import org.eclipse.che.ide.menu.MainMenuViewImpl;
 import org.eclipse.che.ide.menu.StatusPanelGroupView;
 import org.eclipse.che.ide.menu.StatusPanelGroupViewImpl;
-import org.eclipse.che.ide.requirejs.ModuleHolder;
 import org.eclipse.che.ide.ui.button.ConsoleButton;
 import org.eclipse.che.ide.ui.button.ConsoleButtonFactory;
 import org.eclipse.che.ide.ui.button.ConsoleButtonImpl;
@@ -134,6 +133,5 @@ public class UiModule extends AbstractGinModule {
                         .build(ConsoleButtonFactory.class));
 
         bind(StatusPanelGroupView.class).to(StatusPanelGroupViewImpl.class).in(Singleton.class);
-        bind(ModuleHolder.class).in(Singleton.class);
     }
 }
