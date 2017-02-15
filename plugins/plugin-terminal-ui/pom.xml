@@ -11,217 +11,126 @@
       Codenvy, S.A. - initial API and implementation
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <artifactId>che-plugin-parent</artifactId>
-    <groupId>org.eclipse.che.plugin</groupId>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>che-plugin-parent</artifactId>
+        <groupId>org.eclipse.che.plugin</groupId>
+        <version>5.3.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    <artifactId>plugin-terminal-ui</artifactId>
     <version>5.3.0-SNAPSHOT</version>
-    <relativePath>../pom.xml</relativePath>
-  </parent>
-  <artifactId>plugin-terminal-ui</artifactId>
-  <version>5.3.0-SNAPSHOT</version>
-  <packaging>jar</packaging>
-  <name>Terminal UI</name>
-  <properties>
-    <patches.location>${basedir}/patches</patches.location>
-  </properties>
-  <dependencies>
-    <dependency>
-      <groupId>com.google.gwt</groupId>
-      <artifactId>gwt-user</artifactId>
-    </dependency>
-  </dependencies>
-  <build>
-    <sourceDirectory>src/main/java</sourceDirectory>
-    <outputDirectory>target/classes</outputDirectory>
-    <resources>
-      <resource>
-        <directory>src/main/java</directory>
-      </resource>
-      <resource>
-        <directory>src/main/resources</directory>
-      </resource>
-    </resources>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <executions>
-          <!--copy sources-->
-          <execution>
-            <id>copy-source-files</id>
-            <phase>initialize</phase>
-            <goals>
-              <goal>run</goal>
-            </goals>
-            <configuration>
-              <target name="copy files to build terminal">
-                <copy todir="${project.build.directory}/build">
-                  <fileset dir="${basedir}">
-                    <not>
-                      <filename regex="pom.xml|.gitignore|target|patches"/>
-                    </not>
-                  </fileset>
-                </copy>
-              </target>
-            </configuration>
-          </execution>
-          <!--compilation sources-->
-          <execution>
-            <id>compile</id>
-            <phase>compile</phase>
-            <goals>
-              <goal>run</goal>
-            </goals>
-            <configuration>
-              <target>
-                Download NPM dependencies
-                <exec dir="${project.build.directory}/build" executable="npm" failonerror="true">
-                  <arg value="install"/>
-                </exec>
-                <exec dir="${project.build.directory}/build" executable="npm" failonerror="true">
-                  <arg value="run-script"/>
-                  <arg value="build"/>
-                </exec>
-              </target>
-            </configuration>
-          </execution>
-          <!--execute tests-->
-          <execution>
-            <id>test</id>
-            <phase>test</phase>
-            <goals>
-              <goal>run</goal>
-            </goals>
-            <configuration>
-              <target unless="skipTests">
-                <!-- Run tests -->
-                <exec dir="${project.build.directory}/build" executable="npm" failonerror="true">
-                  <arg value="test"/>
-                </exec>
-              </target>
-            </configuration>
-          </execution>
-          <!--copy compiled terminal script to output directory for jar-->
-          <execution>
-            <id>copy-xterm.js</id>
-            <phase>process-classes</phase>
-            <goals>
-              <goal>run</goal>
-            </goals>
-            <configuration>
-              <target name="copy xterm.js">
-                <copy todir="${project.build.outputDirectory}">
-                  <fileset dir="${project.build.directory}/build/build">
-                  </fileset>
-                </copy>
-              </target>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
-      <plugin>
-        <!-- Apply patches before compilation-->
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-patch-plugin</artifactId>
-        <version>1.1.1</version>
-        <executions>
-          <execution>
-            <id>css-patch</id>
-            <phase>compile</phase>
-            <goals>
-              <goal>apply</goal>
-            </goals>
-            <configuration>
-              <patchDirectory>patches</patchDirectory>
-              <patches>
-                <patch>css/fix_css.diff</patch>
-              </patches>
-              <optimizations>false</optimizations>
-              <strictPatching>true</strictPatching>
-              <strip>1</strip>
-              <targetDirectory>${project.build.directory}/classes</targetDirectory>
-            </configuration>
-          </execution>
-          <execution>
-            <id>ts-compile-patch</id>
-            <phase>process-resources</phase>
-            <goals>
-              <goal>apply</goal>
-            </goals>
-            <configuration>
-              <patchDirectory>${patches.location}</patchDirectory>
-              <patches>
-                <patch>tsCompile/fix_typescript_conf.diff</patch>
-              </patches>
-              <optimizations>false</optimizations>
-              <strictPatching>true</strictPatching>
-              <strip>1</strip>
-              <targetDirectory>${project.build.directory}/build</targetDirectory>
-            </configuration>
-          </execution>
-          <execution>
-            <id>package-patch</id>
-            <phase>process-resources</phase>
-            <goals>
-              <goal>apply</goal>
-            </goals>
-            <configuration>
-              <patchDirectory>${patches.location}</patchDirectory>
-              <patches>
-                <patch>package/package_json.diff</patch>
-              </patches>
-              <optimizations>false</optimizations>
-              <strictPatching>true</strictPatching>
-              <strip>1</strip>
-              <targetDirectory>${project.build.directory}/build</targetDirectory>
-            </configuration>
-          </execution>
-          <execution>
-            <id>bugfixes-patch</id>
-            <phase>process-resources</phase>
-            <goals>
-              <goal>apply</goal>
-            </goals>
-            <configuration>
-              <patchDirectory>${patches.location}</patchDirectory>
-              <patches>
-                <patch>bugfixes/bug_fixes.diff</patch>
-              </patches>
-              <optimizations>false</optimizations>
-              <strictPatching>true</strictPatching>
-              <strip>1</strip>
-              <targetDirectory>${project.build.directory}/build/src</targetDirectory>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
-      <plugin>
-        <!--check licences-->
-        <groupId>com.mycila</groupId>
-        <artifactId>license-maven-plugin</artifactId>
-        <configuration>
-          <useDefaultExcludes>false</useDefaultExcludes>
-          <excludes>
-            <exclude>**/src/addons/**</exclude>
-            <exclude>**/src/handlers/**</exclude>
-            <exclude>**/src/main/resources/org/eclipse/che/ide/terminal/client/xterm.css</exclude>
-            <exclude>**/src/test/**/**</exclude>
-            <exclude>**/utils/**</exclude>
-            <exclude>**/src/CompositionHelper.test.ts</exclude>
-            <exclude>**/src/Viewport.ts</exclude>
-            <exclude>**/src/CompositionHelper.ts</exclude>
-            <exclude>**/src/EventEmitter.js</exclude>
-            <exclude>**/src/xterm.js</exclude>
-            <exclude>**/src/Interfaces.ts</exclude>
-            <exclude>**/src/Viewport.test.ts</exclude>
-          </excludes>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
+    <packaging>jar</packaging>
+    <name>Terminal UI</name>
+    <dependencies>
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-user</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-user</artifactId>
+        </dependency>
+    </dependencies>
+    <build>
+        <sourceDirectory>src/main/java</sourceDirectory>
+        <outputDirectory>target/classes</outputDirectory>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>com.mycila</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <configuration>
+                    <useDefaultExcludes>false</useDefaultExcludes>
+                    <excludes>
+                        <exclude>**</exclude>
+                        <!--Todo it's temporary solution-->
+                    </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>clean-up</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <delete dir="${basedir}/node_modules" />
+                                <delete dir="${basedir}/typings" />
+                                <delete dir="${basedir}/build" />
+                                <delete dir="${basedir}/lib" />
+                            </tasks>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>compile</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                Download NPM dependencies
+                                <exec dir="${basedir}" executable="npm" failonerror="true">
+                                    <arg value="install" />
+                                </exec>
+                                <exec dir="${basedir}" executable="npm" failonerror="true">
+                                    <arg value="run-script" />
+                                    <arg value="build" />
+                                </exec>
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>compilation</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target unless="skipTests">
+                                <!-- Run unit tests -->
+                                <exec dir="${basedir}" executable="npm" failonerror="true">
+                                    <arg value="test" />
+                                </exec>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/build</directory>
+                                    <filtering>false</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
