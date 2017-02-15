@@ -52,13 +52,11 @@
                       <exclude>**/src/main/resources/org/eclipse/che/ide/terminal/client/xterm.css</exclude>
                       <exclude>**/src/test/**/**</exclude>
                       <exclude>**/utils/**</exclude>
-                      <exclude>**/src/CompositionHelper.test.ts</exclude>
                       <exclude>**/src/Viewport.ts</exclude>
                       <exclude>**/src/CompositionHelper.ts</exclude>
                       <exclude>**/src/EventEmitter.js</exclude>
                       <exclude>**/src/xterm.js</exclude>
                       <exclude>**/src/Interfaces.ts</exclude>
-                      <exclude>**/src/Viewport.test.ts</exclude>
                     </excludes>
                 </configuration>
             </plugin>
@@ -75,9 +73,7 @@
                         <configuration>
                             <tasks>
                                 <delete dir="${basedir}/node_modules" />
-                                <delete dir="${basedir}/typings" />
                                 <delete dir="${basedir}/build" />
-                                <delete dir="${basedir}/lib" />
                             </tasks>
                         </configuration>
                     </execution>
@@ -97,21 +93,6 @@
                                 <exec dir="${basedir}" executable="npm" failonerror="true">
                                     <arg value="run-script" />
                                     <arg value="build" />
-                                </exec>
-                            </target>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <!--execute tests-->
-                        <id>test</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <target unless="skipTests">
-                                <exec dir="${basedir}" executable="npm" failonerror="true">
-                                    <arg value="test" />
                                 </exec>
                             </target>
                         </configuration>

@@ -17,7 +17,6 @@ var uglify = require('gulp-uglify');
 
 var tsProject = ts.createProject('tsconfig.json');
 var tsConfigOutDir = tsProject.config.compilerOptions.outDir;
-var tsConfiSrcDir = tsProject.config.compilerOptions.rootDir;
 var buildDir = 'build';
 
 /**
@@ -50,20 +49,9 @@ gulp.task('browserify', function() {
 });
 
 /**
- * Compile typescript to the lib folder and copy js files to the lib folder
- */
-gulp.task('prepare-lib', function() {
-  return gulp.src([tsConfiSrcDir + '/**/*.ts', tsConfiSrcDir + '/**/*.js'])
-    .pipe(tsProject())
-    .pipe(sourcemaps.init({loadMaps: true}))
-    .pipe(sourcemaps.write('./', {sourceRoot: '.'}))
-    .pipe(gulp.dest(tsConfigOutDir));
-});
-
-/**
  * Main build task
  */
-gulp.task('build', ['clean', 'browserify', 'prepare-lib']);
+gulp.task('build', ['clean', 'browserify']);
 
 /**
  *  Default task clean temporaries directories and launch the main build task
