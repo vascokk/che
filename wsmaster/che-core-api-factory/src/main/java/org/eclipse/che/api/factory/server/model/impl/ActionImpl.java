@@ -31,19 +31,19 @@ import java.util.Objects;
  * @author Anton Korneta
  */
 @Entity(name = "Action")
-@Table(name = "action")
+@Table(name = "che_factory_action")
 public class ActionImpl implements Action {
 
     @Id
     @GeneratedValue
-    @Column(name = "entityid")
+    @Column(name = "entity_id")
     private Long entityId;
 
     @Column(name = "id")
     private String id;
 
     @ElementCollection
-    @CollectionTable(name = "action_properties", joinColumns = @JoinColumn(name = "action_entityid"))
+    @CollectionTable(name = "che_factory_action_properties", joinColumns = @JoinColumn(name = "action_entity_id"))
     @MapKeyColumn(name = "properties_key")
     @Column(name = "properties")
     private Map<String, String> properties;
