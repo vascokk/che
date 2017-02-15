@@ -15,4 +15,5 @@
 <module>
     <inherits name="com.google.gwt.user.User"/>
     <source path="ide"/>
+    <source path="public"/>
 </module>
