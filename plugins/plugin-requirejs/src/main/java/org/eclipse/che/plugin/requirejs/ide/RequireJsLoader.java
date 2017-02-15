@@ -12,7 +12,7 @@ package org.eclipse.che.plugin.requirejs.ide;
 
 import javax.inject.Inject;
 
-import org.eclipse.che.plugin.requirejs.ide.config.RequirejsConfig;
+import org.eclipse.che.plugin.requirejs.ide.conf.RequirejsConfig;
 import org.eclipse.che.ide.util.loging.Log;
 import com.google.gwt.core.client.Callback;
 import com.google.gwt.core.client.GWT;
