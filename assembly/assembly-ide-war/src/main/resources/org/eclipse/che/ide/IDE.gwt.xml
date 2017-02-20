@@ -88,6 +88,8 @@
     <inherits name="org.eclipse.che.plugin.svn.Subversion"/>
     <inherits name="org.eclipse.che.ide.ext.java.testing.core.TestExtension"/>
 
+    <inherits name='org.eclipse.che.plugin.iot.Blockly'/>
+
     <stylesheet src="IDE.css"/>
 
     <!-- Specify the app entry point class.                         -->

@@ -1,0 +1,63 @@
+<!--
+
+    Copyright (c) 2012-2017 Codenvy, S.A.
+    All rights reserved. This program and the accompanying materials
+    are made available under the terms of the Eclipse Public License v1.0
+    which accompanies this distribution, and is available at
+    http://www.eclipse.org/legal/epl-v10.html
+
+    Contributors:
+      Codenvy, S.A. - initial API and implementation
+
+-->
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+
+    <ui:with field="locale" type="org.eclipse.che.ide.extension.machine.client.MachineLocalizationConstant"/>
+
+    <ui:style>
+
+        @eval outputBackgroundColor org.eclipse.che.ide.api.theme.Style.theme.outputBackgroundColor();
+
+        .blocklyPanel {
+            height: 480px;
+            width: 600px;
+        }
+
+        .blocklyConfig {
+            display: none;
+        }
+
+        .blocklyDiv {
+            height: 100%;
+            width: 100%;
+            overflow: scroll;
+        }
+
+        .htmlPanel {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            overflow: hidden;
+        }
+    </ui:style>
+
+    <g:HTMLPanel styleName="{style.htmlPanel}" >
+        <button onclick="startBlockly()">Start Blockly</button>
+        <table style="width:100%; height:100%;">
+            <tbody>
+                <tr>
+                    <td id="blocklyArea" style="height: 99%;">
+                        Blockly will be positioned here.
+                    </td>
+                </tr>
+            </tbody></table>
+
+
+
+        <!--<div id="blocklyDiv" style="height: 480px;width: 600px;resize: both;overflow: scroll;"></div>-->
+        <div id="blocklyDiv" style="position: absolute"></div>
+
+    </g:HTMLPanel>
+
+</ui:UiBinder>

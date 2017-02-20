@@ -25,6 +25,8 @@
     <packaging>pom</packaging>
     <name>Che Sample :: Parent</name>
     <modules>
+        <module>plugin-iot-kura</module>
+        <module>sample-plugin-actions</module>
         <module>sample-plugin-actions</module>
         <module>sample-plugin-embedjs</module>
         <module>sample-plugin-json</module>

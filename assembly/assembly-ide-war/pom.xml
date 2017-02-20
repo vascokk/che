@@ -281,6 +281,10 @@
             <artifactId>che-plugin-zend-debugger-ide</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.eclipse.che.sample</groupId>
+            <artifactId>plugin-iot-kura-ide</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-user</artifactId>
             <scope>provided</scope>

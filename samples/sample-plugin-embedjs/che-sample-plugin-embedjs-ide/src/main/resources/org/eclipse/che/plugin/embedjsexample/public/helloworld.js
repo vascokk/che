@@ -8,8 +8,7 @@
  * Contributors:
  *   Codenvy, S.A. - initial API and implementation
  */
-function HelloWorld(
-    element, contents) {
+function HelloWorld(element, contents) {
     element.textContent = contents;
 };
 
