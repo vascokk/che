@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "reflect-metadata": "^0.1.8",
-    "websocket": "1.0.23"
+    "websocket": "1.0.34"
   },
   "devDependencies": {
     "babel": "^6.5.2",
