@@ -35,7 +35,7 @@
 #
 # INTERNAL SYNC SCRIPT
 #   /bin/synch.sh <ip> <ws-port>
-FROM alpine:3.4
+FROM alpine:3.11
 
 ENV UNISON_VERSION=2.48.4
 
