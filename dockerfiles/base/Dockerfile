@@ -10,7 +10,7 @@
 # use:
 #    docker run eclipse/che-base
 
-FROM alpine:3.4
+FROM alpine:latest
 
 ENV DOCKER_BUCKET get.docker.com
 ENV DOCKER_VERSION 1.11.2
